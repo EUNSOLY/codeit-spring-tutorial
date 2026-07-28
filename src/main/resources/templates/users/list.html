@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Users List Page</title>
+    </head>
+    <body>
+        <h1>Users List Page</h1>
+        <div>Here is users list</div>
+        <ul>
+            <li th:each="user:${users}">
+                name : <span th:text="${user.name}"></span> | age : <span th:text="${user.age}"></span>
+            </li>
+        </ul>
+    </body>
+</html>
