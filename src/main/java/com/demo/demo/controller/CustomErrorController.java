@@ -7,20 +7,28 @@ import org.springframework.boot.webmvc.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @Slf4j
 public class CustomErrorController implements ErrorController {
 
     @RequestMapping("/error")
-    public String handleError(HttpServletRequest request){
+    public ModelAndView handleError(HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
         Integer statusCode = (Integer)request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
-                return "error/404";
+                modelAndView.addObject("title", "404 Not Found!!");
+                modelAndView.addObject("description", "Page does not exist");
             } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-                return "error/500";
+                modelAndView.addObject("title", "500 Internal Server Error");
+                modelAndView.addObject("description", "Any exception is occurred in ");
             }else{
-                return "error";
+                modelAndView.addObject("title", "Something went wrong!");
+                modelAndView.addObject("description", "Our Engineers are on it");
             }
+            modelAndView.setViewName("error");
+
+            return modelAndView;
     }
 }
