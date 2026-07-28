@@ -1,6 +1,6 @@
-package com.demo.demo.controller;
+package com.demo.controller;
 
-import com.demo.demo.HttpErrorStatus;
+import com.demo.HttpErrorStatus;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
