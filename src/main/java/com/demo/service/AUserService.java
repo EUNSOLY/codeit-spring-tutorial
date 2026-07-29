@@ -22,10 +22,11 @@ public class AUserService implements UserServiceInterface {
 
     @Override
     public User findById(Integer id) {
-        return USERS.stream()
-                .filter(user -> user.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("찾으시는 유저가 없습니다."));
+        return USERS.getFirst();
+//        return USERS.stream()
+//                .filter(user -> user.getId() == id)
+//                .findFirst()
+//                .orElseThrow(() -> new RuntimeException("찾으시는 유저가 없습니다."));
     }
 
     public List<User> findAll() {
