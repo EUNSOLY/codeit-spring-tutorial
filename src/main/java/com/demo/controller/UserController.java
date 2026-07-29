@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.demo.dto.UserCreateRequestDto;
 import com.demo.entity.User;
 import com.demo.service.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
@@ -58,15 +59,8 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public User save(
-            @RequestParam String name,
-            @RequestParam String age,
-            @RequestParam String job,
-            @RequestParam String specialty
+            @ModelAttribute UserCreateRequestDto request
     ) {
-        System.out.println(name + "name");
-        System.out.println(age + "age");
-        System.out.println(job + "job");
-
-        return userService.save(name, Integer.parseInt(age), job, specialty);
+        return userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
     }
 }
