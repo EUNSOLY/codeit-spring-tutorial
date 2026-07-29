@@ -1,7 +1,7 @@
 package com.demo.controller;
 
 import com.demo.entity.User;
-import com.demo.service.UserService;
+import com.demo.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,8 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserServiceInterface userService;
+
 
     @GetMapping("")
     public ModelAndView userPage() {
