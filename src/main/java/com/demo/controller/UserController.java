@@ -2,17 +2,25 @@ package com.demo.controller;
 
 import com.demo.entity.User;
 import com.demo.service.UserServiceInterface;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
+    @Autowired
+    private List<UserServiceInterface> userService;
+    @Autowired
+    private ApplicationContext applicationContext;
     @Autowired
     private UserServiceInterface AUserService;
 
@@ -37,8 +45,15 @@ public class UserController {
     }
 
     @GetMapping("/1/data")
+    @ResponseBody
     public User detailData() {
         User user = AUserService.findById(1);
         return user;
+    }
+
+    @GetMapping("/bean")
+    @ResponseBody
+    public String bean() {
+        return applicationContext.getBean("AUserService", UserServiceInterface.class).toString();
     }
 }
