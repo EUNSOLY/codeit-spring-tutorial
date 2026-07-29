@@ -24,7 +24,7 @@ public class UserController {
         model.addAttribute("users", users);
         return "/users/list";
     }
-
+    
     @GetMapping("/detail")
     public String detailPage(
             @RequestParam Integer id,

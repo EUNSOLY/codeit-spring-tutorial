@@ -11,5 +11,5 @@ public class UserCreateRequestDto {
     private String name;
     private Integer age;
     private String job;
-    private String specialty;
+    private String specialty = "(empty)";
 }
