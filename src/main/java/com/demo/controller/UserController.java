@@ -56,7 +56,7 @@ public class UserController {
 
 
     // POST
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping(value = "")
     @ResponseBody
     public User save(
             @RequestBody UserCreateRequestDto request
