@@ -7,8 +7,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -28,9 +28,10 @@ public class UserController {
 
     }
 
-    @GetMapping("/{id}/detail")
+    @GetMapping("/" +
+            "detail")
     public String detailPage(
-            @PathVariable Integer id,
+            @RequestParam Integer id,
             Model model
     ) {
         User user = AUserService.findById(id);
@@ -43,10 +44,10 @@ public class UserController {
         return "/users/detail";
     }
 
-    @GetMapping("/{id}/data")
+    @GetMapping("/data")
     @ResponseBody
     public User detailData(
-            @PathVariable Integer id
+            @RequestParam Integer id
     ) {
         return AUserService.findById(id);
     }
