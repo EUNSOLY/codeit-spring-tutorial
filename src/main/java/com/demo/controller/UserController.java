@@ -28,8 +28,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/" +
-            "detail")
+    @GetMapping("/detail")
     public String detailPage(
             @RequestParam Integer id,
             Model model
@@ -47,7 +46,7 @@ public class UserController {
     @GetMapping("/data")
     @ResponseBody
     public User detailData(
-            @RequestParam Integer id
+            @RequestParam(required = true, defaultValue = "1") Integer id
     ) {
         return AUserService.findById(id);
     }
