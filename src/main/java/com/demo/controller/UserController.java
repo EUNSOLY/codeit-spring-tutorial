@@ -18,11 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     @Autowired
-    private List<UserServiceInterface> userService;
-    @Autowired
     private ApplicationContext applicationContext;
-    @Autowired
     private UserServiceInterface AUserService;
+
+    @Autowired
+    public void setUserService(UserServiceInterface userService) {
+        this.AUserService = userService;
+    }
 
     @GetMapping("")
     public String userPage(Model model) {
