@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Service
-public class CUserService implements UserServiceInterface {
+public class UserService implements UserServiceInterface {
     private static final List<User> USERS = new ArrayList<>() {
         {
             add(new User(1, "Aaron", 15, "Developer", "Backend"));
@@ -30,5 +30,13 @@ public class CUserService implements UserServiceInterface {
 
     public List<User> findAll() {
         return USERS;
+    }
+
+    @Override
+    public User save(String name, Integer age, String job, String specialty) {
+        int generatedId = USERS.size() + 1;
+        USERS.add(new User(generatedId, name, age, job, specialty));
+        User saved = this.findById(generatedId);
+        return saved;
     }
 }

@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,14 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor // 필수
 public class UserController {
     private final ApplicationContext applicationContext;
-    private final UserServiceInterface AUserService;
+    private final UserServiceInterface userService;
 
     @GetMapping("")
     public String userPage(Model model) {
-        List<User> users = AUserService.findAll();
+        List<User> users = userService.findAll();
         model.addAttribute("users", users);
         return "/users/list";
-
     }
 
     @GetMapping("/detail")
@@ -33,7 +29,7 @@ public class UserController {
             @RequestParam Integer id,
             Model model
     ) {
-        User user = AUserService.findById(id);
+        User user = userService.findById(id);
         model.addAttribute("id", user.getId());
         model.addAttribute("name", user.getName());
         model.addAttribute("age", user.getAge());
@@ -48,12 +44,29 @@ public class UserController {
     public User detailData(
             @RequestParam(required = true, defaultValue = "1") Integer id
     ) {
-        return AUserService.findById(id);
+        return userService.findById(id);
     }
 
     @GetMapping("/bean")
     @ResponseBody
     public String bean() {
         return applicationContext.getBean("AUserService", UserServiceInterface.class).toString();
+    }
+
+
+    // POST
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
+    public User save(
+            @RequestParam String name,
+            @RequestParam String age,
+            @RequestParam String job,
+            @RequestParam String specialty
+    ) {
+        System.out.println(name + "name");
+        System.out.println(age + "age");
+        System.out.println(job + "job");
+
+        return userService.save(name, Integer.parseInt(age), job, specialty);
     }
 }
