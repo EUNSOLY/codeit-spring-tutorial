@@ -14,13 +14,16 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
-    private UserServiceInterface userService;
-
+    private List<UserServiceInterface> userServices;
 
     @GetMapping("")
     public ModelAndView userPage() {
         ModelAndView modelAndView = new ModelAndView();
-        List<User> users = userService.findAll();
+        userServices.forEach((each) -> {
+            System.out.println(each.getClass().getSimpleName());
+        });
+        UserServiceInterface AUserService = userServices.getFirst();
+        List<User> users = AUserService.findAll();
         modelAndView.addObject("users", users);
         modelAndView.setViewName("/users/list");
         return modelAndView;
@@ -29,7 +32,12 @@ public class UserController {
     @GetMapping("/1/detail")
     public ModelAndView detailPage() {
         ModelAndView modelAndView = new ModelAndView();
-        User user = userService.findById(1);
+        userServices.forEach(each -> {
+            System.out.println(each.getClass().getSimpleName());
+        });
+
+        UserServiceInterface AUserService = userServices.getFirst();
+        User user = AUserService.findById(1);
         modelAndView.addObject("id", user.getId());
         modelAndView.addObject("name", user.getName());
         modelAndView.addObject("age", user.getAge());

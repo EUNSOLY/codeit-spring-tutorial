@@ -1,12 +1,14 @@
 package com.demo.service;
 
 import com.demo.entity.User;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class UserService implements UserServiceInterface {
+@Service
+public class CUserService implements UserServiceInterface {
     private static final List<User> USERS = new ArrayList<>() {
         {
             add(new User(1, "Aaron", 15, "Developer", "Backend"));
