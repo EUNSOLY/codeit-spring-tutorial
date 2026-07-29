@@ -26,17 +26,15 @@ public class UserController {
     }
 
     @GetMapping("/1/detail")
-    @ResponseBody
-    public User detailPage(Model model) {
+    public String detailPage(Model model) {
         User user = AUserService.findById(1);
-//      model.addAttribute("id", user.getId());
-//      model.addAttribute("name", user.getName());
-//      model.addAttribute("age", user.getAge());
-//      model.addAttribute("job", user.getJob());
-//      model.addAttribute("specialty", user.getSpecialty());
-        System.out.println("호출");
-        return user;  // User 객체를 직접 반환
-//        return "/users/detail";
+        model.addAttribute("id", user.getId());
+        model.addAttribute("name", user.getName());
+        model.addAttribute("age", user.getAge());
+        model.addAttribute("job", user.getJob());
+        model.addAttribute("specialty", user.getSpecialty());
+
+        return "/users/detail";
     }
 
     @GetMapping("/1/data")
