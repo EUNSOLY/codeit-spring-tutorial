@@ -24,7 +24,7 @@ public class UserController {
         model.addAttribute("users", users);
         return "/users/list";
     }
-    
+
     @GetMapping("/detail")
     public String detailPage(
             @RequestParam Integer id,
@@ -59,7 +59,7 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public User save(
-            @ModelAttribute UserCreateRequestDto request
+            @RequestBody UserCreateRequestDto request
     ) {
         return userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
     }
