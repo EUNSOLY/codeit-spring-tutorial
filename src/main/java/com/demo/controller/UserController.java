@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.demo.dto.UserCreateRequestDto;
 import com.demo.entity.User;
 import com.demo.service.UserServiceInterface;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -59,7 +60,7 @@ public class UserController {
     @PostMapping(value = "")
     @ResponseBody
     public User save(
-            @RequestBody UserCreateRequestDto request
+            @RequestBody @Valid UserCreateRequestDto request
     ) {
         return userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
     }

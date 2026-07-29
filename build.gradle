@@ -30,6 +30,9 @@ dependencies {
     //	Thymeleaf 자동리로드
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+    // 유효성 검사를 위한라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 }
 
 tasks.named('test') {
