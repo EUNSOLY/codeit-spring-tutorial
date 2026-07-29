@@ -3,7 +3,6 @@ package com.demo.controller;
 import com.demo.entity.User;
 import com.demo.service.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,16 +14,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/users")
-@RequiredArgsConstructor
+@RequiredArgsConstructor // 필수
 public class UserController {
-    @Autowired
-    private ApplicationContext applicationContext;
-    private UserServiceInterface AUserService;
-
-    @Autowired
-    public void setUserService(UserServiceInterface userService) {
-        this.AUserService = userService;
-    }
+    private final ApplicationContext applicationContext;
+    private final UserServiceInterface AUserService;
 
     @GetMapping("")
     public String userPage(Model model) {
