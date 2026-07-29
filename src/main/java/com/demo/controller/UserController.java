@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -33,6 +34,12 @@ public class UserController {
         model.addAttribute("job", user.getJob());
         model.addAttribute("specialty", user.getSpecialty());
         return "/users/detail";
+    }
 
+    @GetMapping("/1/data")
+    @ResponseBody
+    public User detailData() {
+        User user = AUserService.findById(1);
+        return user;
     }
 }
