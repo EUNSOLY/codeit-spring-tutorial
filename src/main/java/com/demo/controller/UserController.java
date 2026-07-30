@@ -25,22 +25,37 @@ public class UserController {
     public UserResponseDto findById(
             @PathVariable Integer id
     ) {
-        return userService.findById(id);
-
+        try {
+            return userService.findById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     // 회원 생성
     @PostMapping(value = "")
-
     public UserResponseDto createUser(
             @RequestBody UserCreateRequestDto requestDto
     ) {
-        return userService.create(requestDto);
+        try {
+            return userService.create(requestDto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // 회원 수정
     // 회원 삭제
-
+    @DeleteMapping(value = "/{id}")
+    public void delete(
+            @PathVariable Integer id
+    ) {
+        try {
+            userService.delete(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
