@@ -15,8 +15,7 @@ public class UserCreateRequestDto {
     int age;
     String job;
     String specialty;
-
-
+    
     public User toEntity() {
         return new User(0, this.name, this.age, this.job, this.specialty);
     }
