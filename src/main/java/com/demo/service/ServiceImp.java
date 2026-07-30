@@ -1,4 +1,4 @@
 package com.demo.service;
 
-public class UserService {
+public class ServiceImp {
 }
