@@ -14,10 +14,10 @@ public class Member extends Human {
     JobType job;
     String email;
 
-    public Member(Integer id, String name, Integer age, String job, String email) {
+    public Member(Integer id, String name, Integer age, JobType job, String email) {
         super(id, name);
         this.age = age;
-        this.job = JobType.toJobType(job);
+        this.job = job;
         this.email = email;
     }
 }

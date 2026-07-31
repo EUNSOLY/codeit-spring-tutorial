@@ -1,12 +1,14 @@
 package com.demo.repository;
 
 import com.demo.entity.Member;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Repository
 public class MemberRepository implements IRepository, IDGenerator {
     private static final Map<Integer, Member> DATABASE = new HashMap<>();
     private static Integer ID = 0;
@@ -14,9 +16,11 @@ public class MemberRepository implements IRepository, IDGenerator {
 
     @Override
     public Member create(Member entity) {
-        DATABASE.put(entity.getId(), entity);
+        Member newEntity = new Member(ID, entity.getName(), entity.getAge(), entity.getJob(), entity.getEmail());
+        DATABASE.put(ID, newEntity);
+        Member savedMember = DATABASE.get(ID);
         this.nextId();
-        return null;
+        return savedMember;
     }
 
     @Override
