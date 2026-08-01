@@ -48,12 +48,12 @@ public class MemberController {
     public MemberResponseDto createUser(
             @RequestBody MemberCreateRequestDto request
     ) {
-        MemberResponseDto member = memberService.create(request);
-        log.info("사용자 생성 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
-                member.getId(), member.getName(),
-                member.getAge(), member.getJob(),
-                member.getEmail(), member.isDeleted());
-        return member;
+        MemberResponseDto memberResponse = memberService.create(request);
+        log.info("사용자 생성 :  User (id={}, name={}, age={}, job={}, email={})",
+                memberResponse.getId(), memberResponse.getName(),
+                memberResponse.getAge(), memberResponse.getJob(),
+                memberResponse.getEmail());
+        return memberResponse;
     }
 
     @PostMapping(value = "/api/users-all")
@@ -61,28 +61,28 @@ public class MemberController {
     public List<MemberResponseDto> createUsers(
             @RequestBody @Valid List<MemberCreateRequestDto> requests
     ) {
-        List<MemberResponseDto> memberResponse = memberService.createAll(requests);
-        memberResponse.forEach(dto -> {
-            log.info("사용자 다중 생성 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
-                    dto.getId(), dto.getName(),
-                    dto.getAge(), dto.getJob(),
-                    dto.getEmail(), dto.isDeleted());
+        List<MemberResponseDto> memberResponses = memberService.createAll(requests);
+        memberResponses.forEach(memberResponse -> {
+            log.info("사용자 다중 생성 :  User (id={}, name={}, age={}, job={}, email={})",
+                    memberResponse.getId(), memberResponse.getName(),
+                    memberResponse.getAge(), memberResponse.getJob(),
+                    memberResponse.getEmail());
         });
-        return memberResponse;
+        return memberResponses;
     }
 
     @GetMapping(value = "/api/users")
     @ResponseBody
     public List<MemberResponseDto> getUsers() {
-        List<MemberResponseDto> memberResponse = memberService.readAll();
-        memberResponse.forEach(dto -> {
-            log.info("사용자 전체 조회 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
-                    dto.getId(), dto.getName(),
-                    dto.getAge(), dto.getJob(),
-                    dto.getEmail(), dto.isDeleted());
+        List<MemberResponseDto> memberResponses = memberService.readAll();
+        memberResponses.forEach(memberResponse -> {
+            log.info("사용자 전체 조회 :  User (id={}, name={}, age={}, job={}, email={})",
+                    memberResponse.getId(), memberResponse.getName(),
+                    memberResponse.getAge(), memberResponse.getJob(),
+                    memberResponse.getEmail());
         });
 
-        return memberResponse;
+        return memberResponses;
     }
 
     @GetMapping(value = "/api/users/{id}")
@@ -91,10 +91,10 @@ public class MemberController {
             @PathVariable(required = true) Integer id
     ) {
         MemberResponseDto memberResponse = memberService.read(id);
-        log.info("사용자 1건 조회 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+        log.info("사용자 1건 조회 :  User (id={}, name={}, age={}, job={}, email={})",
                 memberResponse.getId(), memberResponse.getName(),
                 memberResponse.getAge(), memberResponse.getJob(),
-                memberResponse.getEmail(), memberResponse.isDeleted());
+                memberResponse.getEmail());
         return memberResponse;
     }
 
@@ -109,10 +109,10 @@ public class MemberController {
     ) {
         MemberUpdateRequestDto request = new MemberUpdateRequestDto(name, age, job, email);
         MemberResponseDto memberResponse = memberService.update(id, request);
-        log.info("사용자 부분 수정 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+        log.info("사용자 부분 수정 :  User (id={}, name={}, age={}, job={}, email={})",
                 memberResponse.getId(), memberResponse.getName(),
                 memberResponse.getAge(), memberResponse.getJob(),
-                memberResponse.getEmail(), memberResponse.isDeleted());
+                memberResponse.getEmail());
         return memberResponse;
     }
 
@@ -124,10 +124,10 @@ public class MemberController {
             @ModelAttribute @Valid MemberPutRequestDto request
     ) {
         MemberResponseDto memberResponse = memberService.update(id, request);
-        log.info("사용자 전체 수정 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+        log.info("사용자 전체 수정 :  User (id={}, name={}, age={}, job={}, email={})",
                 memberResponse.getId(), memberResponse.getName(),
                 memberResponse.getAge(), memberResponse.getJob(),
-                memberResponse.getEmail(), memberResponse.isDeleted());
+                memberResponse.getEmail());
         return memberResponse;
     }
 
@@ -135,9 +135,9 @@ public class MemberController {
     @ResponseBody
     public void deleteUser(@PathVariable(required = true) Integer id) {
         MemberResponseDto memberResponse = memberService.delete(id);
-        log.info("삭제 사용자 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+        log.info("삭제 사용자 :  User (id={}, name={}, age={}, job={}, email={})",
                 memberResponse.getId(), memberResponse.getName(),
                 memberResponse.getAge(), memberResponse.getJob(),
-                memberResponse.getEmail(), memberResponse.isDeleted());
+                memberResponse.getEmail());
     }
 }
