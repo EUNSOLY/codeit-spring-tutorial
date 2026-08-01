@@ -3,7 +3,10 @@ package com.demo.repository;
 import com.demo.entity.Member;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class MemberRepository extends IdGenerator implements IRepository<Member, Integer> {
@@ -33,19 +36,15 @@ public class MemberRepository extends IdGenerator implements IRepository<Member,
 
     @Override
     public Member update(Member entity) {
-        Member member = STORAGE.get(entity.getId());
-        if (Objects.isNull(member)) {
-            throw new RuntimeException("존재하지 않는 회원입니다.");
-        }
-        return STORAGE.replace(entity.getId(), entity);
+        return Optional.ofNullable(STORAGE.get(entity.getId()))
+                .map(existing -> STORAGE.replace(entity.getId(), entity))
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
     }
 
     @Override
     public Member delete(Integer id) {
-        Member member = STORAGE.get(id);
-        if (Objects.isNull(member)) {
-            throw new RuntimeException("존재하지 않는 회원입니다.");
-        }
-        return STORAGE.remove(id);
+        return Optional.ofNullable(STORAGE.get(id))
+                .map(existing -> STORAGE.remove(id))
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
     }
 }
