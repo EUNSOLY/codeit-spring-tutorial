@@ -1,10 +1,14 @@
 package com.demo.controller;
 
 
+import com.demo.dto.MemberCreateRequestDto;
+import com.demo.dto.MemberPutRequestDto;
 import com.demo.dto.MemberResponseDto;
-import com.demo.dto.MemberUpsertRequestDto;
+import com.demo.dto.MemberUpdateRequestDto;
 import com.demo.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
@@ -21,12 +26,12 @@ public class MemberController {
     public String getUsersPage(Model model) {
         List<MemberResponseDto> memberResponses = memberService.readAll();
         model.addAttribute("users", memberResponses);
-        return "user/list";
+        return "users/list";
     }
 
     @GetMapping(value = "/users/{id}")
     public String getUserPage(
-            @PathVariable Integer id,
+            @PathVariable(required = true) Integer id,
             ModelMap modelMap
     ) {
         MemberResponseDto memberResponses = memberService.read(id);
@@ -35,38 +40,62 @@ public class MemberController {
         modelMap.addAttribute("job", memberResponses.getJob());
         modelMap.addAttribute("email", memberResponses.getEmail());
 
-
-        return "user/detail";
+        return "users/detail";
     }
 
     @PostMapping(value = "/api/users")
     @ResponseBody
     public MemberResponseDto createUser(
-            @RequestBody MemberUpsertRequestDto request
+            @RequestBody MemberCreateRequestDto request
     ) {
-        return memberService.create(request);
+        MemberResponseDto member = memberService.create(request);
+        log.info("사용자 생성 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+                member.getId(), member.getName(),
+                member.getAge(), member.getJob(),
+                member.getEmail(), member.isDeleted());
+        return member;
     }
 
     @PostMapping(value = "/api/users-all")
     @ResponseBody
     public List<MemberResponseDto> createUsers(
-            @RequestBody List<MemberUpsertRequestDto> requests
+            @RequestBody @Valid List<MemberCreateRequestDto> requests
     ) {
-        return memberService.createAll(requests);
+        List<MemberResponseDto> memberResponse = memberService.createAll(requests);
+        memberResponse.forEach(dto -> {
+            log.info("사용자 다중 생성 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+                    dto.getId(), dto.getName(),
+                    dto.getAge(), dto.getJob(),
+                    dto.getEmail(), dto.isDeleted());
+        });
+        return memberResponse;
     }
 
     @GetMapping(value = "/api/users")
     @ResponseBody
     public List<MemberResponseDto> getUsers() {
-        return memberService.readAll();
+        List<MemberResponseDto> memberResponse = memberService.readAll();
+        memberResponse.forEach(dto -> {
+            log.info("사용자 전체 조회 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+                    dto.getId(), dto.getName(),
+                    dto.getAge(), dto.getJob(),
+                    dto.getEmail(), dto.isDeleted());
+        });
+
+        return memberResponse;
     }
 
     @GetMapping(value = "/api/users/{id}")
     @ResponseBody
     public MemberResponseDto getUser(
-            @PathVariable Integer id
+            @PathVariable(required = true) Integer id
     ) {
-        return memberService.read(id);
+        MemberResponseDto memberResponse = memberService.read(id);
+        log.info("사용자 1건 조회 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+                memberResponse.getId(), memberResponse.getName(),
+                memberResponse.getAge(), memberResponse.getJob(),
+                memberResponse.getEmail(), memberResponse.isDeleted());
+        return memberResponse;
     }
 
     @PatchMapping(value = "/api/users/{id}")
@@ -78,8 +107,13 @@ public class MemberController {
             @RequestParam(required = false) String job,
             @RequestParam(required = false) String email
     ) {
-        MemberUpsertRequestDto request = new MemberUpsertRequestDto(name, age, job, email);
-        return memberService.update(id, request);
+        MemberUpdateRequestDto request = new MemberUpdateRequestDto(name, age, job, email);
+        MemberResponseDto memberResponse = memberService.update(id, request);
+        log.info("사용자 부분 수정 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+                memberResponse.getId(), memberResponse.getName(),
+                memberResponse.getAge(), memberResponse.getJob(),
+                memberResponse.getEmail(), memberResponse.isDeleted());
+        return memberResponse;
     }
 
 
@@ -87,15 +121,23 @@ public class MemberController {
     @ResponseBody
     public MemberResponseDto putUser(
             @PathVariable(required = false) Integer id,
-            @ModelAttribute MemberUpsertRequestDto request
+            @ModelAttribute @Valid MemberPutRequestDto request
     ) {
-        return memberService.update(id, request);
+        MemberResponseDto memberResponse = memberService.update(id, request);
+        log.info("사용자 전체 수정 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+                memberResponse.getId(), memberResponse.getName(),
+                memberResponse.getAge(), memberResponse.getJob(),
+                memberResponse.getEmail(), memberResponse.isDeleted());
+        return memberResponse;
     }
 
     @DeleteMapping(value = "/api/users/{id}")
     @ResponseBody
-    public void deleteUser(@PathVariable Integer id) {
-        memberService.delete(id);
+    public void deleteUser(@PathVariable(required = true) Integer id) {
+        MemberResponseDto memberResponse = memberService.delete(id);
+        log.info("삭제 사용자 : User (id={}, name={}, age={}, job={}, email={}, isDeleted={})",
+                memberResponse.getId(), memberResponse.getName(),
+                memberResponse.getAge(), memberResponse.getJob(),
+                memberResponse.getEmail(), memberResponse.isDeleted());
     }
-
 }

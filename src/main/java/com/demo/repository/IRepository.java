@@ -1,17 +1,15 @@
 package com.demo.repository;
 
-import com.demo.entity.Member;
-
 import java.util.List;
 
-public interface IRepository {
-    Member create(Member entity);
+public interface IRepository<T, K> {
+    T create(T entity);
 
-    List<Member> readAll();
+    List<T> readAll();
 
-    Member read(Integer id);
+    T read(K id);
 
-    Member update(Member entity);
+    T update(T entity);
 
-    void delete(Integer id);
+    T delete(K id);
 }

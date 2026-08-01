@@ -3,13 +3,10 @@ package com.demo.repository;
 import com.demo.entity.Member;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Repository
-public class MemberRepository extends IdGenerator implements IRepository {
+public class MemberRepository extends IdGenerator implements IRepository<Member, Integer> {
     private static final Map<Integer, Member> STORAGE = new HashMap<>();
 
     @Override
@@ -23,16 +20,15 @@ public class MemberRepository extends IdGenerator implements IRepository {
 
     @Override
     public List<Member> readAll() {
-        return STORAGE.values().stream().toList();
+        return STORAGE.values().stream().filter(member -> !member.isDeleted()).toList();
     }
 
     @Override
     public Member read(Integer id) {
-        Member member = STORAGE.get(id);
-        if (Objects.isNull(member)) {
-            throw new RuntimeException("존재하지 않는 회원입니다.");
-        }
-        return STORAGE.get(id);
+        return Optional.of(STORAGE.get(id))
+                .filter(member -> !member.isDeleted())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+
     }
 
     @Override
@@ -45,11 +41,11 @@ public class MemberRepository extends IdGenerator implements IRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public Member delete(Integer id) {
         Member member = STORAGE.get(id);
         if (Objects.isNull(member)) {
             throw new RuntimeException("존재하지 않는 회원입니다.");
         }
-        STORAGE.remove(id);
+        return STORAGE.remove(id);
     }
 }

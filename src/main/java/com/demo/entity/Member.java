@@ -15,9 +15,9 @@ public class Member extends Human {
 
 
     public Member(Integer id, String name, Integer age, String job, String email) {
-        super(id, name);
+        super(id, name, false);
         this.age = age;
-        this.job = JobType.of(job);
+        this.job = job == null ? JobType.DEVELOPER : JobType.of(job);
         this.email = email;
     }
 

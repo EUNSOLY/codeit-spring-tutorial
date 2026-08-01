@@ -12,9 +12,14 @@ import lombok.experimental.FieldDefaults;
 public class Human {
     final Integer id;
     String name;
+    boolean isDeleted = false;
 
     public void updateName(String name) {
         this.name = name;
+    }
+    
+    public boolean changeIsDeleted() {
+        return this.isDeleted = !this.isDeleted;
     }
 
 }

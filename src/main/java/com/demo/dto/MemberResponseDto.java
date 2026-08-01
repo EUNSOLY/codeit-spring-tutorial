@@ -16,8 +16,9 @@ public class MemberResponseDto {
     Integer age;
     JobType job;
     String email;
+    boolean isDeleted;
 
     public static MemberResponseDto to(Member entity) {
-        return new MemberResponseDto(entity.getId(), entity.getName(), entity.getAge(), entity.getJob(), entity.getEmail());
+        return new MemberResponseDto(entity.getId(), entity.getName(), entity.getAge(), entity.getJob(), entity.getEmail(), entity.isDeleted());
     }
 }
