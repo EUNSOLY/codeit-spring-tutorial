@@ -1,6 +1,7 @@
 package com.demo.dto;
 
 import com.demo.entity.Member;
+import com.demo.enums.JobType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,10 @@ public class MemberResponseDto {
     Integer id;
     String name;
     Integer age;
-    String job;
+    JobType job;
     String email;
 
     public static MemberResponseDto to(Member entity) {
-        return new MemberResponseDto(entity.getId(), entity.getName(), entity.getAge(), entity.getJob().getJobType(), entity.getEmail());
+        return new MemberResponseDto(entity.getId(), entity.getName(), entity.getAge(), entity.getJob(), entity.getEmail());
     }
 }
