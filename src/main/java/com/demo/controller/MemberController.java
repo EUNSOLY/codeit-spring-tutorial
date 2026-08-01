@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 
+import com.demo.common.ApiResponse;
 import com.demo.dto.MemberCreateRequestDto;
 import com.demo.dto.MemberPutRequestDto;
 import com.demo.dto.MemberResponseDto;
@@ -9,8 +10,6 @@ import com.demo.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -58,7 +57,7 @@ public class MemberController {
      */
     @PostMapping(value = "/api/users")
     @ResponseBody
-    public ResponseEntity<MemberResponseDto> createUser(
+    public ApiResponse<MemberResponseDto> createUser(
             @RequestBody MemberCreateRequestDto request
     ) {
         try {
@@ -67,20 +66,19 @@ public class MemberController {
                     memberResponse.getId(), memberResponse.getName(),
                     memberResponse.getAge(), memberResponse.getJob(),
                     memberResponse.getEmail());
-            return ResponseEntity
-                    .ok(memberResponse);
+
+            return ApiResponse.success(memberResponse);
 
         } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+
+            return ApiResponse.fail(500, e.getMessage(), null);
         }
 
     }
 
     @PostMapping(value = "/api/users-all")
     @ResponseBody
-    public ResponseEntity<List<MemberResponseDto>> createUsers(
+    public ApiResponse<List<MemberResponseDto>> createUsers(
             @RequestBody @Valid List<MemberCreateRequestDto> requests
     ) {
         try {
@@ -91,19 +89,17 @@ public class MemberController {
                         memberResponse.getAge(), memberResponse.getJob(),
                         memberResponse.getEmail());
             });
-            return ResponseEntity
-                    .ok(memberResponses);
+
+            return ApiResponse.success(memberResponses);
         } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            return ApiResponse.fail(500, e.getMessage(), null);
         }
 
     }
 
     @GetMapping(value = "/api/users")
     @ResponseBody
-    public ResponseEntity<List<MemberResponseDto>> getUsers() {
+    public ApiResponse<List<MemberResponseDto>> getUsers() {
         try {
             List<MemberResponseDto> memberResponses = memberService.readAll();
             memberResponses.forEach(memberResponse -> {
@@ -112,17 +108,16 @@ public class MemberController {
                         memberResponse.getAge(), memberResponse.getJob(),
                         memberResponse.getEmail());
             });
-            // 생성자로 하는 방법
-            return new ResponseEntity<>(memberResponses, HttpStatus.OK);
+
+            return ApiResponse.success(memberResponses);
         } catch (RuntimeException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ApiResponse.fail(500, e.getMessage(), null);
         }
     }
 
     @GetMapping(value = "/api/users/{id}")
     @ResponseBody
-    public ResponseEntity<MemberResponseDto> getUser(
+    public ApiResponse<MemberResponseDto> getUser(
             @PathVariable(required = true) Integer id
     ) {
         try {
@@ -131,15 +126,17 @@ public class MemberController {
                     memberResponse.getId(), memberResponse.getName(),
                     memberResponse.getAge(), memberResponse.getJob(),
                     memberResponse.getEmail());
-            return ResponseEntity.status(HttpStatus.OK).body(memberResponse);
+
+            return ApiResponse.success(memberResponse);
+
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ApiResponse.fail(500, e.getMessage(), null);
         }
     }
 
     @PatchMapping(value = "/api/users/{id}")
     @ResponseBody
-    public ResponseEntity<MemberResponseDto> patchUser(
+    public ApiResponse<MemberResponseDto> patchUser(
             @PathVariable(required = false) Integer id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer age,
@@ -153,16 +150,18 @@ public class MemberController {
                     memberResponse.getId(), memberResponse.getName(),
                     memberResponse.getAge(), memberResponse.getJob(),
                     memberResponse.getEmail());
-            return ResponseEntity.status(HttpStatus.OK).body(memberResponse);
+
+            return ApiResponse.success(memberResponse);
+
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ApiResponse.fail(500, e.getMessage(), null);
         }
     }
 
 
     @PutMapping(value = "/api/users/{id}")
     @ResponseBody
-    public ResponseEntity<MemberResponseDto> putUser(
+    public ApiResponse<MemberResponseDto> putUser(
             @PathVariable(required = false) Integer id,
             @ModelAttribute @Valid MemberPutRequestDto request
     ) {
@@ -172,24 +171,28 @@ public class MemberController {
                     memberResponse.getId(), memberResponse.getName(),
                     memberResponse.getAge(), memberResponse.getJob(),
                     memberResponse.getEmail());
-            return ResponseEntity.status(HttpStatus.OK).body(memberResponse);
+
+            return ApiResponse.success(memberResponse);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
+            return ApiResponse.fail(500, e.getMessage(), null);
         }
     }
 
     @DeleteMapping(value = "/api/users/{id}")
     @ResponseBody
-    public ResponseEntity<String> deleteUser(@PathVariable(required = true) Integer id) {
+    public ApiResponse<MemberResponseDto> deleteUser(@PathVariable(required = true) Integer id) {
         try {
             MemberResponseDto memberResponse = memberService.delete(id);
             log.info("삭제 사용자 :  User (id={}, name={}, age={}, job={}, email={})",
                     memberResponse.getId(), memberResponse.getName(),
                     memberResponse.getAge(), memberResponse.getJob(),
                     memberResponse.getEmail());
-            return ResponseEntity.status(HttpStatus.OK).body("삭제 완료");
+
+            return ApiResponse.success(memberResponse);
+
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패.");
+            return ApiResponse.fail(500, e.getMessage(), null);
         }
     }
 }
