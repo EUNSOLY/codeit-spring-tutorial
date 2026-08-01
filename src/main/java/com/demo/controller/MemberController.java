@@ -1,8 +1,8 @@
 package com.demo.controller;
 
-import com.demo.dto.MemberCreateRequestDto;
+import com.demo.dto.MemberPatchRequestDto;
 import com.demo.dto.MemberResponseDto;
-import com.demo.dto.MemberUpdateRequestDto;
+import com.demo.dto.MemberUpsertRequestDto;
 import com.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class MemberController {
     @PostMapping(value = "/api/users-all")
     @ResponseBody
     public List<MemberResponseDto> createUsers(
-            @RequestBody List<MemberCreateRequestDto> requestDtos
+            @RequestBody List<MemberUpsertRequestDto> requestDtos
     ) {
         List<MemberResponseDto> members = memberService.createAll(requestDtos);
         log.info("다건 생성");
@@ -65,7 +65,7 @@ public class MemberController {
     @PostMapping(value = "/api/users")
     @ResponseBody
     public MemberResponseDto createUser(
-            @RequestBody MemberCreateRequestDto requestDto
+            @RequestBody MemberUpsertRequestDto requestDto
     ) {
         log.info("단일 생성");
         MemberResponseDto member = memberService.create(requestDto);
@@ -98,8 +98,15 @@ public class MemberController {
     // 단일 부분 수정
     @PatchMapping(value = "/api/users/{id}")
     @ResponseBody
-    public MemberResponseDto updateUser(@RequestParam MemberUpdateRequestDto requestDto) {
-        MemberResponseDto member = memberService.update(requestDto);
+    public MemberResponseDto updateUser(
+            @PathVariable Integer id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer age,
+            @RequestParam(required = false) String job,
+            @RequestParam(required = false) String email
+    ) {
+        MemberPatchRequestDto patchRequestDto = new MemberPatchRequestDto(name, age, job, email);
+        MemberResponseDto member = memberService.update(id, patchRequestDto);
         log.info("단일 부분 수정");
         log.info("수정 Member : id={}, name={}, age={}, job={}, email={}, ", member.getId(), member.getName(), member.getAge(), member.getJob(), member.getEmail());
         return member;
@@ -108,8 +115,11 @@ public class MemberController {
     // 단일 전체 수정
     @PutMapping(value = "/api/users/{id}")
     @ResponseBody
-    public MemberResponseDto replaceUser(@ModelAttribute MemberUpdateRequestDto requestDto) {
-        MemberResponseDto member = memberService.update(requestDto);
+    public MemberResponseDto replaceUser(
+            @PathVariable Integer id,
+            @ModelAttribute MemberUpsertRequestDto requestDto
+    ) {
+        MemberResponseDto member = memberService.update(id, requestDto);
         log.info("단일 전체 수정");
         log.info("수정 Member : id={}, name={}, age={}, job={}, email={}, ", member.getId(), member.getName(), member.getAge(), member.getJob(), member.getEmail());
         return member;

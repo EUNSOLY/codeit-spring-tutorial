@@ -3,38 +3,30 @@ package com.demo.repository;
 import com.demo.entity.Member;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Repository
-public class MemberRepository implements IRepository, IDGenerator {
+public class MemberRepository extends IDAbstractGenerator implements IRepository<Integer, Member> {
     private static final Map<Integer, Member> DATABASE = new HashMap<>();
-    private static Integer ID = 0;
-
 
     @Override
     public Member create(Member entity) {
-        Member newEntity = new Member(ID, entity.getName(), entity.getAge(), entity.getJob(), entity.getEmail());
-        DATABASE.put(ID, newEntity);
-        Member savedMember = DATABASE.get(ID);
-        this.nextId();
-        return savedMember;
+        Integer id = super.nextId();
+        Member newEntity = new Member(id, entity.getName(), entity.getAge(), entity.getJob(), entity.getEmail());
+        DATABASE.put(id, newEntity);
+        return DATABASE.get(id);
     }
 
     @Override
     public List<Member> readAll() {
-        return DATABASE.values().stream().toList();
+        return DATABASE.values().stream().filter(member -> !member.isDeleted()).toList();
     }
 
     @Override
     public Member read(Integer id) {
-        Member member = DATABASE.get(id);
-        if (Objects.isNull(member)) {
-            throw new RuntimeException("찾으시는 회원이 존재하지 않습니다.");
-        }
-        return member;
+        return Optional.of(DATABASE.get(id))
+                .filter(member -> !member.isDeleted())
+                .orElseThrow(() -> new RuntimeException("찾으시는 회원이 존재하지 않습니다."));
     }
 
     @Override
@@ -54,16 +46,7 @@ public class MemberRepository implements IRepository, IDGenerator {
             throw new RuntimeException("삭제를 원하는 회원이 존재하지 않습니다.");
         }
         DATABASE.remove(id);
-        this.previousId();
+//        this.previousId();
     }
 
-    @Override
-    public Integer nextId() {
-        return ID++;
-    }
-
-    @Override
-    public Integer previousId() {
-        return ID--;
-    }
 }

@@ -1,15 +1,23 @@
 package com.demo.entity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Getter
-@RequiredArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Human {
-    Integer id;
+    final Integer id;
     String name;
+    boolean isDeleted; // soft Delete
 
+    protected void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeIsDeleted() {
+        this.isDeleted = !this.isDeleted;
+    }
 }
