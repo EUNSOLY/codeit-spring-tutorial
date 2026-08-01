@@ -1,0 +1,22 @@
+package com.demo.dto;
+
+import com.demo.entity.Member;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public class MemberResponseDto {
+    Integer id;
+    String name;
+    Integer age;
+    String job;
+    String email;
+
+    public static MemberResponseDto to(Member entity) {
+        return new MemberResponseDto(entity.getId(), entity.getName(), entity.getAge(), entity.getJob().getJobType(), entity.getEmail());
+    }
+}

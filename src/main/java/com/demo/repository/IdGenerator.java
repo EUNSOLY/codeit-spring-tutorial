@@ -1,7 +1,7 @@
 package com.demo.repository;
 
 public abstract class IdGenerator {
-    private Integer id = 0;
+    private Integer id = 1;
 
     protected Integer increase() {
         return id++;

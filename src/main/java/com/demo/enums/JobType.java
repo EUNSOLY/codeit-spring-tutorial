@@ -9,11 +9,12 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public enum JobType {
-    DEVELOPER("Developer");
+    DEVELOPER("Developer"),
+    DESIGNER("Designer"),
+    ENGINEER("Engineer");
 
     String jobType;
-
-
+    
     public static JobType of(String jobType) {
         for (JobType job : JobType.values()) {
             if (job.getJobType().equals(jobType)) {

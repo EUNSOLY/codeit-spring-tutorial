@@ -1,12 +1,14 @@
 package com.demo.repository;
 
 import com.demo.entity.Member;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Repository
 public class MemberRepository extends IdGenerator implements IRepository {
     private static final Map<Integer, Member> STORAGE = new HashMap<>();
 

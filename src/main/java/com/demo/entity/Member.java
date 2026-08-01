@@ -27,4 +27,5 @@ public class Member extends Human {
         if (job != null) this.job = JobType.of(job);
         if (email != null) this.email = email;
     }
+
 }
