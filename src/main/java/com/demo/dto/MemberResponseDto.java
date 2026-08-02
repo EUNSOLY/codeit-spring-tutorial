@@ -17,7 +17,7 @@ public class MemberResponseDto {
     JobType job;
     String email;
 
-    public static MemberResponseDto to(Member entity) {
+    public static MemberResponseDto from(Member entity) {
         return new MemberResponseDto(entity.getId(), entity.getName(), entity.getAge(), entity.getJob(), entity.getEmail());
     }
 }

@@ -1,7 +1,6 @@
 package com.demo.dto;
 
 
-import com.demo.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -21,9 +20,4 @@ public class MemberPutRequestDto {
     String job;
     @NotBlank
     String email;
-
-
-    public Member toEntity() {
-        return new Member(0, this.name, this.age, this.job, this.email);
-    }
 }

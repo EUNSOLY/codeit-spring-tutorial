@@ -15,10 +15,10 @@ public class MemberRepository extends IdGenerator implements IRepository<Member,
     @Override
     public Member create(Member entity) {
         Integer id = super.increase();
-        Member newMember = new Member(id, entity.getName(), entity.getAge(), entity.getJob().getJobType(), entity.getEmail());
-        STORAGE.put(id, newMember);
+        entity.assignId(id);
+        STORAGE.put(id, entity); // 수정할예정
 
-        return newMember;
+        return entity;
     }
 
     @Override

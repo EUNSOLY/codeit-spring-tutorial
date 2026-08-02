@@ -1,7 +1,6 @@
 package com.demo.dto;
 
 
-import com.demo.entity.Member;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +23,4 @@ public class MemberUpsertRequestDto {
     String email;
 
 
-    public Member toEntity() {
-        return new Member(0, this.name, this.age, this.job, this.email);
-    }
 }

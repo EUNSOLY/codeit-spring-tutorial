@@ -19,9 +19,9 @@ public class MemberService {
     public List<MemberResponseDto> createAll(List<MemberUpsertRequestDto> requests) {
         List<MemberResponseDto> memberResponse = new ArrayList<>();
         for (MemberUpsertRequestDto request : requests) {
-            Member newMember = request.toEntity();
+            Member newMember = Member.toEntity(request);
             Member savedMember = memberRepository.create(newMember);
-            memberResponse.add(MemberResponseDto.to(savedMember));
+            memberResponse.add(MemberResponseDto.from(savedMember));
         }
 
         return memberResponse;
@@ -29,21 +29,21 @@ public class MemberService {
 
 
     public MemberResponseDto create(MemberUpsertRequestDto request) {
-        Member newMember = request.toEntity();
+        Member newMember = Member.toEntity(request);
         Member savedMember = memberRepository.create(newMember);
 
-        return MemberResponseDto.to(savedMember);
+        return MemberResponseDto.from(savedMember);
     }
 
     public List<MemberResponseDto> readAll() {
         List<Member> members = memberRepository.readAll();
 
-        return members.stream().map(MemberResponseDto::to).toList();
+        return members.stream().map(MemberResponseDto::from).toList();
     }
 
     public MemberResponseDto read(Integer id) {
         Member member = memberRepository.read(id);
-        return MemberResponseDto.to(member);
+        return MemberResponseDto.from(member);
     }
 
     public MemberResponseDto update(Integer id, MemberUpsertRequestDto request) {
@@ -51,7 +51,7 @@ public class MemberService {
         originMember.updateMember(request.getName(), request.getAge(), request.getJob(), request.getEmail());
         memberRepository.update(originMember);
 
-        return MemberResponseDto.to(originMember);
+        return MemberResponseDto.from(originMember);
     }
 
     public MemberResponseDto update(Integer id, MemberPutRequestDto request) {
@@ -59,11 +59,11 @@ public class MemberService {
         originMember.updateMember(request.getName(), request.getAge(), request.getJob(), request.getEmail());
         memberRepository.update(originMember);
 
-        return MemberResponseDto.to(originMember);
+        return MemberResponseDto.from(originMember);
     }
 
     public MemberResponseDto delete(Integer id) {
         Member deleteMember = memberRepository.delete(id);
-        return MemberResponseDto.to(deleteMember);
+        return MemberResponseDto.from(deleteMember);
     }
 }
