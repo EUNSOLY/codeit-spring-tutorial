@@ -2,10 +2,9 @@ package com.demo.controller;
 
 
 import com.demo.common.ApiResponse;
-import com.demo.dto.MemberCreateRequestDto;
 import com.demo.dto.MemberPutRequestDto;
 import com.demo.dto.MemberResponseDto;
-import com.demo.dto.MemberUpdateRequestDto;
+import com.demo.dto.MemberUpsertRequestDto;
 import com.demo.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +57,7 @@ public class MemberController {
     @PostMapping(value = "/api/users")
     @ResponseBody
     public ApiResponse<MemberResponseDto> createUser(
-            @RequestBody MemberCreateRequestDto request
+            @RequestBody MemberUpsertRequestDto request
     ) {
         try {
             MemberResponseDto memberResponse = memberService.create(request);
@@ -70,7 +69,6 @@ public class MemberController {
             return ApiResponse.success(memberResponse);
 
         } catch (RuntimeException e) {
-
             return ApiResponse.fail(500, e.getMessage(), null);
         }
 
@@ -79,7 +77,7 @@ public class MemberController {
     @PostMapping(value = "/api/users-all")
     @ResponseBody
     public ApiResponse<List<MemberResponseDto>> createUsers(
-            @RequestBody @Valid List<MemberCreateRequestDto> requests
+            @RequestBody @Valid List<MemberUpsertRequestDto> requests
     ) {
         try {
             List<MemberResponseDto> memberResponses = memberService.createAll(requests);
@@ -144,7 +142,7 @@ public class MemberController {
             @RequestParam(required = false) String email
     ) {
         try {
-            MemberUpdateRequestDto request = new MemberUpdateRequestDto(name, age, job, email);
+            MemberUpsertRequestDto request = new MemberUpsertRequestDto(name, age, job, email); // 이게 맞나요... DTO는 컨트롤러랑 친함
             MemberResponseDto memberResponse = memberService.update(id, request);
             log.info("사용자 부분 수정 :  User (id={}, name={}, age={}, job={}, email={})",
                     memberResponse.getId(), memberResponse.getName(),

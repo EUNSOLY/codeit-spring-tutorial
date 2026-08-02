@@ -1,0 +1,118 @@
+@startuml codeit-spring-tutorial
+
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+left to right direction
+
+package com.demo {
+    class DemoApplication
+}
+
+package com.demo.controller {
+    class MemberController {
+        - memberService : MemberService
+    }
+}
+
+package com.demo.service {
+    class MemberService {
+        - memberRepository : MemberRepository
+    }
+}
+
+package com.demo.repository {
+    interface IRepository<T, K>
+
+    abstract class IdGenerator {
+        - id : Integer
+    }
+
+    class MemberRepository {
+        - STORAGE : Map<Integer, Member>
+    }
+}
+
+package com.demo.entity {
+    class Human {
+        - id : Integer
+        - name : String
+        - isDeleted : boolean
+    }
+
+    class Member {
+        - age : Integer
+        - job : JobType
+        - email : String
+    }
+}
+
+package com.demo.dto {
+    class MemberUpsertRequestDto {
+        - name : String
+        - age : Integer
+        - job : String
+        - email : String
+    }
+
+    class MemberPutRequestDto {
+        - name : String
+        - age : Integer
+        - job : String
+        - email : String
+    }
+
+    class MemberResponseDto {
+        - id : Integer
+        - name : String
+        - age : Integer
+        - job : JobType
+        - email : String
+    }
+}
+
+package com.demo.enums {
+    enum JobType {
+        DEVELOPER
+        DESIGNER
+        ENGINEER
+        - jobType : String
+    }
+}
+
+package com.demo.common {
+    class ApiResponse<T> {
+        - success : boolean
+        - code : int
+        - message : String
+        - data : T
+    }
+}
+
+' ===== relations =====
+MemberController --> MemberService
+MemberController ..> ApiResponse
+MemberController ..> MemberUpsertRequestDto
+MemberController ..> MemberPutRequestDto
+MemberController ..> MemberResponseDto
+
+MemberService --> MemberRepository
+MemberService ..> MemberUpsertRequestDto
+MemberService ..> MemberPutRequestDto
+MemberService ..> MemberResponseDto
+MemberService ..> Member
+
+MemberRepository ..|> IRepository
+MemberRepository --|> IdGenerator
+MemberRepository ..> Member
+
+Member --|> Human
+Member --> JobType
+
+MemberUpsertRequestDto ..> Member
+MemberPutRequestDto ..> Member
+MemberResponseDto ..> Member
+MemberResponseDto --> JobType
+
+@enduml

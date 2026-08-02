@@ -1,9 +1,8 @@
 package com.demo.service;
 
-import com.demo.dto.MemberCreateRequestDto;
 import com.demo.dto.MemberPutRequestDto;
 import com.demo.dto.MemberResponseDto;
-import com.demo.dto.MemberUpdateRequestDto;
+import com.demo.dto.MemberUpsertRequestDto;
 import com.demo.entity.Member;
 import com.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +16,9 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public List<MemberResponseDto> createAll(List<MemberCreateRequestDto> requests) {
+    public List<MemberResponseDto> createAll(List<MemberUpsertRequestDto> requests) {
         List<MemberResponseDto> memberResponse = new ArrayList<>();
-        for (MemberCreateRequestDto request : requests) {
+        for (MemberUpsertRequestDto request : requests) {
             Member newMember = request.toEntity();
             Member savedMember = memberRepository.create(newMember);
             memberResponse.add(MemberResponseDto.to(savedMember));
@@ -29,7 +28,7 @@ public class MemberService {
     }
 
 
-    public MemberResponseDto create(MemberCreateRequestDto request) {
+    public MemberResponseDto create(MemberUpsertRequestDto request) {
         Member newMember = request.toEntity();
         Member savedMember = memberRepository.create(newMember);
 
@@ -47,7 +46,7 @@ public class MemberService {
         return MemberResponseDto.to(member);
     }
 
-    public MemberResponseDto update(Integer id, MemberUpdateRequestDto request) {
+    public MemberResponseDto update(Integer id, MemberUpsertRequestDto request) {
         Member originMember = memberRepository.read(id);
         originMember.updateMember(request.getName(), request.getAge(), request.getJob(), request.getEmail());
         memberRepository.update(originMember);

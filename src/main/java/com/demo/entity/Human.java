@@ -18,8 +18,8 @@ public class Human {
         this.name = name;
     }
 
-    public boolean changeIsDeleted() {
-        return this.isDeleted = !this.isDeleted;
+    public boolean humanDelete() {
+        return this.isDeleted = true;
     }
 
 }

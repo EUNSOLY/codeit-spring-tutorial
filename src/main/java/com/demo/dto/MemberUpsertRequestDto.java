@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class MemberUpdateRequestDto {
+public class MemberUpsertRequestDto {
     @NotBlank
     String name;
     @NotNull
