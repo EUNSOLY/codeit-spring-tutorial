@@ -7,6 +7,7 @@ import com.demo.dto.MemberResponseDto;
 import com.demo.dto.MemberUpsertRequestDto;
 import com.demo.service.MemberService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
+//@Validated  // 메서드 파라미터(PathVariable, RequestParam 등)에 대한 Bean Validation 활성화
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
@@ -116,7 +118,8 @@ public class MemberController {
     @GetMapping(value = "/api/users/{id}")
     @ResponseBody
     public ApiResponse<MemberResponseDto> getUser(
-            @PathVariable(required = true) Integer id
+            @PathVariable(required = true)
+            @Positive Integer id
     ) {
         try {
             MemberResponseDto memberResponse = memberService.read(id);
