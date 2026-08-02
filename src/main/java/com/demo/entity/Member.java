@@ -21,11 +21,13 @@ public class Member extends Human {
         this.email = email;
     }
 
-    public void updateMember(String name, Integer age, String job, String email) {
+    public Member updateMember(String name, Integer age, String job, String email) {
         if (name != null) super.updateName(name);
         if (age != null) this.age = age;
         if (job != null) this.job = JobType.of(job);
         if (email != null) this.email = email;
+
+        return this;
     }
 
     // 최초 생성 Member Entity 생성 시 id 값 null 처리를 위해 정적 메서드 사용

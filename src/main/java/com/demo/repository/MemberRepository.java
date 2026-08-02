@@ -16,7 +16,7 @@ public class MemberRepository extends IdGenerator implements IRepository<Member,
     public Member create(Member entity) {
         Integer id = super.increase();
         entity.assignId(id);
-        STORAGE.put(id, entity); // 수정할예정
+        STORAGE.put(id, entity);
 
         return entity;
     }
@@ -27,24 +27,21 @@ public class MemberRepository extends IdGenerator implements IRepository<Member,
     }
 
     @Override
-    public Member read(Integer id) {
-        return Optional.of(STORAGE.get(id))
-                .filter(member -> !member.isDeleted())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
-
-    }
-
-    @Override
-    public Member update(Member entity) {
-        return Optional.ofNullable(STORAGE.get(entity.getId()))
-                .map(existing -> STORAGE.replace(entity.getId(), entity))
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
-    }
-
-    @Override
-    public Member delete(Integer id) {
+    public Optional<Member> read(Integer id) {
         return Optional.ofNullable(STORAGE.get(id))
-                .map(existing -> STORAGE.remove(id))
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+                .filter(member -> !member.isDeleted());
+
+    }
+
+    @Override
+    public Optional<Member> update(Member entity) {
+        return Optional.ofNullable(STORAGE.get(entity.getId()))
+                .map(existing -> STORAGE.replace(entity.getId(), entity));
+    }
+
+    @Override
+    public Optional<Member> delete(Integer id) {
+        return Optional.ofNullable(STORAGE.get(id))
+                .map(existing -> STORAGE.remove(id));
     }
 }

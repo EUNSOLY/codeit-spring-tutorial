@@ -1,15 +1,16 @@
 package com.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IRepository<T, K> {
     T create(T entity);
 
     List<T> readAll();
 
-    T read(K id);
+    Optional<T> read(K id);
 
-    T update(T entity);
+    Optional<T> update(T entity);
 
-    T delete(K id);
+    Optional<T> delete(K id);
 }

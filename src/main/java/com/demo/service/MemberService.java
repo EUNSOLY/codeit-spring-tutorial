@@ -42,28 +42,33 @@ public class MemberService {
     }
 
     public MemberResponseDto read(Integer id) {
-        Member member = memberRepository.read(id);
-        return MemberResponseDto.from(member);
+        return memberRepository.read(id).map(MemberResponseDto::from)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
     }
 
     public MemberResponseDto update(Integer id, MemberUpsertRequestDto request) {
-        Member originMember = memberRepository.read(id);
-        originMember.updateMember(request.getName(), request.getAge(), request.getJob(), request.getEmail());
+        Member originMember = memberRepository.read(id)
+                .map(member -> member.updateMember(request.getName(), request.getAge(), request.getJob(), request.getEmail()))
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
         memberRepository.update(originMember);
 
         return MemberResponseDto.from(originMember);
     }
 
     public MemberResponseDto update(Integer id, MemberPutRequestDto request) {
-        Member originMember = memberRepository.read(id);
-        originMember.updateMember(request.getName(), request.getAge(), request.getJob(), request.getEmail());
+        Member originMember = memberRepository.read(id)
+                .map(member -> member.updateMember(request.getName(), request.getAge(), request.getJob(), request.getEmail()))
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+
         memberRepository.update(originMember);
 
         return MemberResponseDto.from(originMember);
     }
 
     public MemberResponseDto delete(Integer id) {
-        Member deleteMember = memberRepository.delete(id);
+        Member deleteMember = memberRepository.delete(id).orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+        
         return MemberResponseDto.from(deleteMember);
+//
     }
 }
