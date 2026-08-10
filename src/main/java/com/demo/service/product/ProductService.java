@@ -46,4 +46,10 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("업데이트가 정상적으로 되지 않습니다"));
     }
 
+    public List<Product> update(List<Product> entities) {
+        return entities.stream()
+                .map(this::update)
+                .toList();
+    }
+
 }
