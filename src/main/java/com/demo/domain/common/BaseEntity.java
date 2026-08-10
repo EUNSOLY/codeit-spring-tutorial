@@ -45,9 +45,8 @@ public abstract class BaseEntity {
      *
      * @param userId - 어떤 유저가 값을 바꿨는지 추적하기 위함 <- Auditing
      */
-    public void updated(Integer userId) {
+    protected void updated(Integer userId) {
         this.updatedAt = LocalDateTime.now();
         this.updatedBy = userId;
     }
-
 }
