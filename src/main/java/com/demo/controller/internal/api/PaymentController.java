@@ -1,11 +1,13 @@
 package com.demo.controller.internal.api;
 
+import com.demo.application.payment.PaymentApplication;
 import com.demo.controller.internal.dto.PaymentCreateRequestDto;
 import com.demo.controller.internal.dto.PaymentResponseDto;
 import com.demo.controller.internal.dto.RequestingUserDto;
-import com.demo.service.payment.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * PaymentController
@@ -17,14 +19,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class PaymentController {
-    private final PaymentService paymentService;
+    private final PaymentApplication paymentApplication;
 
 
     @PostMapping(value = "/internal/api/payments")
     public PaymentResponseDto payment(
             @RequestBody PaymentCreateRequestDto request
     ) {
-        return paymentService.payment(request);
+        List<Integer> productIds = request.getProductIds();
+        Integer requestedUserId = request.getRequestUserId();
+        return paymentApplication.payment(productIds, requestedUserId);
     }
 
 
@@ -33,6 +37,7 @@ public class PaymentController {
             @PathVariable Integer id,
             @RequestBody RequestingUserDto requestingUser
     ) {
-        return paymentService.cancel(id, requestingUser);
+        int requestUserId = requestingUser.getRequestUserId();
+        return paymentApplication.cancel(id, requestUserId);
     }
 }
