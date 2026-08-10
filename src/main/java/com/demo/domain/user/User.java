@@ -2,8 +2,10 @@ package com.demo.domain.user;
 
 import com.demo.domain.common.BaseEntity;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString(callSuper = true)
 public class User extends BaseEntity {
     private static int USER_CURRENT_ID = 0;
 

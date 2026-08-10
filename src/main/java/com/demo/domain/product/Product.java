@@ -2,8 +2,11 @@ package com.demo.domain.product;
 
 import com.demo.domain.common.BaseEntity;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
+@ToString(callSuper = true)
 public class Product extends BaseEntity {
     private static int PRODUCT_CURRENT_ID = 0;
 
@@ -13,6 +16,7 @@ public class Product extends BaseEntity {
 
     private String name; // 상품명
     private int price; // 가격
+    @Setter
     private int stock; // 재고
 
 

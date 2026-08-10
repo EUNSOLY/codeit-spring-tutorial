@@ -3,11 +3,14 @@ package com.demo.domain.payment;
 import com.demo.domain.common.BaseEntity;
 import com.demo.domain.product.Product;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@ToString(callSuper = true)
 public class Payment extends BaseEntity {
     private static int PAYMENT_CURRENT_ID = 0;
 
@@ -16,10 +19,14 @@ public class Payment extends BaseEntity {
     }
 
     private List<Integer> productIds; // 구매할 상품의 고유값들
+    @Setter
     private PaymentStatus status = PaymentStatus.IN_PAYMENT; // 결제 상태
     private int paidPrice; // 결제 가격
+    @Setter
     private LocalDateTime purchasedAt; // 결제 완료 시점
+    @Setter
     private LocalDateTime deliveredAt; // 배송 완료 시점
+    @Setter
     private LocalDateTime cancelledAt; // 취소 완료 시점
 
 

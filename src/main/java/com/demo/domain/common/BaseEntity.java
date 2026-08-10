@@ -2,6 +2,7 @@ package com.demo.domain.common;
 
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 
 // public class BaseEntity { -> BaseEntity 는 개별적인 객체로 생성(new BaseEntity(...))되어서는 안됨! 단순히 템플릿 클래스로의 역할만 수행하도록
 @Getter
+@ToString
 public abstract class BaseEntity {
     protected Integer id;
     protected boolean deleted = false;
@@ -43,7 +45,7 @@ public abstract class BaseEntity {
      *
      * @param userId - 어떤 유저가 값을 바꿨는지 추적하기 위함 <- Auditing
      */
-    protected void updated(Integer userId) {
+    public void updated(Integer userId) {
         this.updatedAt = LocalDateTime.now();
         this.updatedBy = userId;
     }
