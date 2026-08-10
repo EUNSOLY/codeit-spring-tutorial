@@ -1,5 +1,7 @@
 package com.demo.admin.api;
 
+import com.demo.repository.product.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -9,5 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * - API이기 때문에 @Controller + @ResponseBody을 같이 쓴 것과 같은 @RestController 사용
  */
 @RestController
+@RequiredArgsConstructor
 public class ProductApiController {
+    private final ProductRepository productRepository;
 }

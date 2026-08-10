@@ -1,5 +1,7 @@
 package com.demo.external.api;
 
+import com.demo.repository.payment.PaymentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,5 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
+@RequiredArgsConstructor
 public class DeliveryController {
+    private final PaymentRepository paymentRepository;
 }

@@ -1,5 +1,7 @@
 package com.demo.admin.web;
 
+import com.demo.repository.product.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -10,5 +12,8 @@ import org.springframework.stereotype.Controller;
  * - 페이지 제공용이기 때문에 @Controller 사용
  */
 @Controller
+@RequiredArgsConstructor
 public class ProductWebController {
+    private final ProductRepository productRepository;
+
 }
