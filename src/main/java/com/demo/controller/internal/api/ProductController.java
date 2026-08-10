@@ -2,8 +2,7 @@ package com.demo.controller.internal.api;
 
 
 import com.demo.controller.internal.dto.ProductResponseDto;
-import com.demo.domain.product.Product;
-import com.demo.repository.product.ProductRepository;
+import com.demo.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,13 +20,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
     @GetMapping(value = "/internal/api/products")
     public List<ProductResponseDto> retrieve() {
-        List<Product> products = productRepository.findAll();
-        return products.stream().map(ProductResponseDto::from)
-                .toList();
+        return productService.retrieve();
     }
 
 
@@ -35,9 +32,6 @@ public class ProductController {
     public ProductResponseDto retrieve(
             @PathVariable Integer id
     ) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("찾으시는 유저가 존재하지 않습니다"));
-
-        return ProductResponseDto.from(product);
+        return productService.retrieve(id);
     }
 }
