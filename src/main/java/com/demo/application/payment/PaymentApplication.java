@@ -12,11 +12,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentApplication {
+public class PaymentApplication implements IPaymentApplication {
     private final PaymentService paymentService;
     private final ProductService productService;
 
-
+    @Override
     public PaymentResponseDto payment(List<Integer> productIds, Integer requestedUserId) {
         PaymentResponseDto.PaymentResponseDtoBuilder responseBuilder = PaymentResponseDto.builder();
 
@@ -39,6 +39,7 @@ public class PaymentApplication {
                 .build();
     }
 
+    @Override
     public PaymentResponseDto cancel(Integer id, Integer requestedUserId) {
         PaymentResponseDto.PaymentResponseDtoBuilder responseBuilder = PaymentResponseDto.builder();
         // 1. 취소하려는 결제건이 존재하는지 확인

@@ -10,10 +10,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductApplication {
+public class ProductApplication implements IProductApplication {
     private final ProductService productService;
 
 
+    @Override
     public List<ProductResponseDto> retrieve() {
         List<Product> products = productService.getProducts();
         return products.stream()
@@ -21,6 +22,7 @@ public class ProductApplication {
                 .toList();
     }
 
+    @Override
     public ProductResponseDto retrieve(Integer id) {
         Product retrieved = productService.getProduct(id);
         return ProductResponseDto.from(retrieved);

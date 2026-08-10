@@ -1,7 +1,7 @@
 package com.demo.controller.internal.api;
 
 
-import com.demo.application.product.ProductApplication;
+import com.demo.application.product.IProductApplication;
 import com.demo.controller.internal.dto.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductApplication productApplication;
+    /**
+     * Hexagonal (Port and Adaptor) 아키텍쳐 도입 시
+     * 동일 내용
+     */
+    private final IProductApplication productApplication;
 
     @GetMapping(value = "/internal/api/products")
     public List<ProductResponseDto> retrieve() {

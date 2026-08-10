@@ -1,7 +1,7 @@
 package com.demo.service.product;
 
 import com.demo.domain.product.Product;
-import com.demo.repository.product.ProductRepository;
+import com.demo.repository.IRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    private final ProductRepository productRepository;
+    /**
+     * Hexagonal (Port and Adaptor) 아키텍쳐 도입 시
+     * - Controller <= Primary Adaptor = Driving Adaptor
+     * - Application 인터페이스 <= Input Port
+     * - Repository 인터페이스 <= Output Port
+     * - Repository 구체클래스 <= Secondary Adaptor = Driven Adaptor
+     */
+    private final IRepository<Integer, Product> productRepository;
 
     public List<Product> getProducts() {
         return productRepository.findAll();

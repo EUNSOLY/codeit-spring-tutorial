@@ -1,7 +1,7 @@
 package com.demo.service.payment;
 
 import com.demo.domain.payment.Payment;
-import com.demo.repository.payment.PaymentRepository;
+import com.demo.repository.IRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
-    private final PaymentRepository paymentRepository;
+    /**
+     * Hexagonal (Port and Adaptor) 아키텍쳐 도입 시
+     * 동일 내용
+     */
+    private final IRepository<Integer, Payment> paymentRepository;
 
     public Payment getPayment(Integer id) {
         return paymentRepository.findById(id)

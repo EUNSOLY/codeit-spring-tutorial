@@ -1,6 +1,6 @@
 package com.demo.controller.internal.api;
 
-import com.demo.application.payment.PaymentApplication;
+import com.demo.application.payment.IPaymentApplication;
 import com.demo.controller.internal.dto.PaymentCreateRequestDto;
 import com.demo.controller.internal.dto.PaymentResponseDto;
 import com.demo.controller.internal.dto.RequestingUserDto;
@@ -19,7 +19,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class PaymentController {
-    private final PaymentApplication paymentApplication;
+    /**
+     * Hexagonal (Port and Adaptor) 아키텍쳐 도입 시
+     * 동일 내용
+     */
+    private final IPaymentApplication paymentApplication;
 
 
     @PostMapping(value = "/internal/api/payments")
