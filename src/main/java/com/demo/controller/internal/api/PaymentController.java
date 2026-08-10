@@ -1,6 +1,7 @@
 package com.demo.controller.internal.api;
 
 import com.demo.application.payment.IPaymentApplication;
+import com.demo.common.UserContext;
 import com.demo.controller.internal.dto.PaymentCreateRequestDto;
 import com.demo.controller.internal.dto.PaymentResponseDto;
 import com.demo.controller.internal.dto.RequestingUserDto;
@@ -32,7 +33,9 @@ public class PaymentController {
     ) {
         List<Integer> productIds = request.getProductIds();
         Integer requestedUserId = request.getRequestUserId();
-        return paymentApplication.payment(productIds, requestedUserId);
+        try (UserContext.ContextScope ignored = UserContext.withUser(requestedUserId)) {
+            return paymentApplication.payment(productIds);
+        }
     }
 
 
@@ -41,7 +44,9 @@ public class PaymentController {
             @PathVariable Integer id,
             @RequestBody RequestingUserDto requestingUser
     ) {
-        int requestUserId = requestingUser.getRequestUserId();
-        return paymentApplication.cancel(id, requestUserId);
+        int requestedUserId = requestingUser.getRequestUserId();
+        try (UserContext.ContextScope ignored = UserContext.withUser(requestedUserId)) {
+            return paymentApplication.cancel(id);
+        }
     }
 }
