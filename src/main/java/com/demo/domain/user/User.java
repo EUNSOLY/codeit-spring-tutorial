@@ -1,26 +1,28 @@
 package com.demo.domain.user;
 
+import com.demo.domain.common.BaseEntity;
 import lombok.Getter;
 
 @Getter
-public class User {
+public class User extends BaseEntity {
     private static int USER_CURRENT_ID = 0;
 
     private static int idGenerate() {
         return ++USER_CURRENT_ID;
     }
 
-    private Integer id;
     private String name; // 사용자명
-    private boolean deleted = false; // 사용자 삭제 여부
 
-    private User(Integer id, String name) {
-        this.id = id;
+    private User(Integer id, Integer createdByUserId, String name) {
+        super(id, createdByUserId);
         this.name = name;
     }
 
-    public static User create(String name) {
+    public static User create(
+            String name,
+            Integer createdByUserId /* 누가 유저를 생성했는지 */
+    ) {
         int generatedId = idGenerate();
-        return new User(generatedId, name);
+        return new User(generatedId, createdByUserId, name);
     }
 }
