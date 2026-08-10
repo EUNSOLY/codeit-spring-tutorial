@@ -1,4 +1,4 @@
-package com.demo.internal.dto;
+package com.demo.controller.internal.dto;
 
 import lombok.Getter;
 

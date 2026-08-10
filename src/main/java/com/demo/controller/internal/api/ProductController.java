@@ -1,8 +1,8 @@
-package com.demo.internal.api;
+package com.demo.controller.internal.api;
 
 
+import com.demo.controller.internal.dto.ProductResponseDto;
 import com.demo.domain.product.Product;
-import com.demo.internal.dto.ProductResponseDto;
 import com.demo.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +30,7 @@ public class ProductController {
                 .toList();
     }
 
-    
+
     @GetMapping(value = "/internal/api/products/{id}")
     public ProductResponseDto retrieve(
             @PathVariable Integer id

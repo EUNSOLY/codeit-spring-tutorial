@@ -1,11 +1,11 @@
-package com.demo.internal.api;
+package com.demo.controller.internal.api;
 
+import com.demo.controller.internal.dto.PaymentCreateRequestDto;
+import com.demo.controller.internal.dto.PaymentResponseDto;
+import com.demo.controller.internal.dto.RequestingUserDto;
 import com.demo.domain.payment.Payment;
 import com.demo.domain.payment.PaymentStatus;
 import com.demo.domain.product.Product;
-import com.demo.internal.dto.PaymentCreateRequestDto;
-import com.demo.internal.dto.PaymentResponseDto;
-import com.demo.internal.dto.RequestingUserDto;
 import com.demo.repository.payment.PaymentRepository;
 import com.demo.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;

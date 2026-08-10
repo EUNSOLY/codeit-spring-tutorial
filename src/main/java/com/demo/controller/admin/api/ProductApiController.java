@@ -1,4 +1,4 @@
-package com.demo.admin.api;
+package com.demo.controller.admin.api;
 
 import com.demo.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.demo.external.api;
+package com.demo.controller.external.api;
 
 import com.demo.repository.payment.PaymentRepository;
 import lombok.RequiredArgsConstructor;
