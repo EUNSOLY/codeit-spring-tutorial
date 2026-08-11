@@ -45,4 +45,11 @@ public class Product extends BaseEntity {
     public void increase() {
         this.stock += 1;
     }
+
+    public void update(String name, int price, int stock) {
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+        super.updated();
+    }
 }

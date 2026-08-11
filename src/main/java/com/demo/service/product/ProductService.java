@@ -47,6 +47,12 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    public Product create(Product entity) {
+        Optional<Product> wrappedCreated = productRepository.create(entity);
+        return wrappedCreated
+                .orElseThrow(() -> new RuntimeException("상품이 정상적으로 생성되지 않습니다"));
+    }
+
     public Product update(Product entity) {
         Optional<Product> wrappedProduct = productRepository.update(entity);
         return wrappedProduct
@@ -59,4 +65,20 @@ public class ProductService {
                 .toList();
     }
 
+    public void active(Integer id) {
+        Product exist = this.getProduct(id);
+        exist.active();
+        productRepository.update(exist);
+    }
+
+    public void softDelete(Integer id) {
+        Product exist = this.getProduct(id);
+        exist.delete();
+        productRepository.update(exist);
+    }
+
+    public void hardDelete(Integer id) {
+        Product exist = this.getProduct(id);
+        productRepository.delete(id);
+    }
 }
