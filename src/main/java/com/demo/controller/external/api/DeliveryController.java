@@ -1,7 +1,10 @@
 package com.demo.controller.external.api;
 
-import com.demo.repository.payment.PaymentRepository;
+import com.demo.application.payment.DeliveryApplication;
+import com.demo.controller.external.dto.DeliveryResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,5 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class DeliveryController {
-    private final PaymentRepository paymentRepository;
+    private final DeliveryApplication deliveryApplication;
+
+    @PatchMapping(value = "/external/api/payments/{id}/in-delivery")
+    public DeliveryResponseDto delivery(@PathVariable Integer id) {
+        return deliveryApplication.delivery(id);
+    }
+
+    @PatchMapping(value = "/external/api/payments/{id}/delivery-complete")
+    public DeliveryResponseDto delivered(@PathVariable Integer id) {
+        return deliveryApplication.delivered(id);
+    }
 }
