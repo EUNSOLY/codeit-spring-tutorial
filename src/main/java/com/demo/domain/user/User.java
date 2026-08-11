@@ -34,4 +34,13 @@ public class User extends BaseEntity {
     public void earn(int paidPrice) {
         this.point += (int) (paidPrice * this.grade.getEarningRate());
     }
+
+    
+    public void update(String name, UserGrade grade, int point) {
+        this.name = name;
+        this.grade = grade;
+        this.point = point;
+        super.updated();
+    }
+
 }
