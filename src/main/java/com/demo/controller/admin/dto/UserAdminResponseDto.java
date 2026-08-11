@@ -2,8 +2,10 @@ package com.demo.controller.admin.dto;
 
 import com.demo.domain.user.User;
 import com.demo.domain.user.UserGrade;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public class UserAdminResponseDto {
     private final Integer id;

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="UTF-8">
         <title>User Detail Information Page</title>
     </head>
     <body>
         <h1>User Detail Information (UserId: <span th:text="${id}"></span>)</h1>
-        <div>Here is a user detail information</div>
+        <div>Here is an user detail information</div>
         <div>- name : <span th:text="${name}"></span></div>
-        <div>- age : <span th:text="${age}"></span></div>
-        <div>- job : <span th:text="${job}"></span></div>
-        <div>- email : <span th:text="${email}"></span></div>
+        <div>- grade : <span th:text="${grade}"></span></div>
+        <div>- point : <span th:text="${point}"></span></div>
+        <div>- deleted : <span th:text="${deleted}"></span></div>
     </body>
 </html>

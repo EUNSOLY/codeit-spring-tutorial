@@ -1,8 +1,14 @@
 package com.demo.controller.admin.web;
 
-import com.demo.repository.user.UserRepository;
+import com.demo.application.user.UserAdminApplication;
+import com.demo.controller.admin.dto.UserAdminResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * UserWebController
@@ -14,5 +20,23 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequiredArgsConstructor
 public class UserWebController {
-    private final UserRepository userRepository;
+    private final UserAdminApplication userAdminApplication;
+
+    @GetMapping(value = "/admin/web/users")
+    public String users(Model model) {
+        List<UserAdminResponseDto> users = userAdminApplication.retrieve();
+        model.addAttribute("users", users);
+        return "/users/list";
+    }
+
+    @GetMapping(value = "/admin/web/users/{id}")
+    public String user(@RequestParam Integer id, Model model) {
+        UserAdminResponseDto user = userAdminApplication.retrieve(id);
+        model.addAttribute("id", user.getId());
+        model.addAttribute("name", user.getName());
+        model.addAttribute("grade", user.getGrade());
+        model.addAttribute("point", user.getPoint());
+        model.addAttribute("deleted", user.isDeleted());
+        return "/users/detail";
+    }
 }

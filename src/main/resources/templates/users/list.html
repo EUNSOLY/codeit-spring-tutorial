@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="UTF-8">
         <title>Users List Page</title>
@@ -9,8 +9,10 @@
         <div>Here is users list</div>
         <ul>
             <li th:each="user:${users}">
-                name : <span th:text="${user.name}"></span> | age : <span th:text="${user.age}"></span>
-                job : <span th:text="${user.job}"></span> | email : <span th:text="${user.email}"></span>
+                name : <span th:text="${user.name}"></span> |
+                grade : <span th:text="${user.grade}"></span> |
+                point : <span th:text="${user.point}"></span> |
+                deleted : <span th:text="${user.deleted}"></span>
             </li>
 
         </ul>
