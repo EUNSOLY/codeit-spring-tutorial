@@ -1,1 +1,32 @@
+// build.gradle : 멀티 모듈을 할때 현재 파일을 사용함
+// codeit-spring-tutorial - 폴더명 / [demo] : 프로젝트명
+// 프로젝트명이랑 폴더명이랑 헷갈리지 말기
+
 rootProject.name = 'demo'
+
+/**
+ * 내가 정의할 모든 멀티모듈에서 공통적으로 사용하는 라이브러리들에 대해서는최상단의 build.gradle 내 정의
+ * - Lombok : Java 및 Spring을 개발한다면 공통적으로 필요한 라이브러리
+ * - JUint + Spring Test 공통 테스트 라이브러리
+ */
+
+
+include 'codeit-core' // 삼지창의 목
+/**
+ * 어떤 API / WEB 을 개발하든 도메인이 가장 핵심이며 공통부분 (core)
+ * - 공통적으로 사용하는 로직 (예)
+ * - Domain(Entity)      : Payment <- 도메인(데이터)의 상태(필드)를 갖고 상태변이에 해당하는 메서드 제공
+ * - Domain Service      : PaymentService <- 고수준 CRUD
+ * - Domain Repository   : PaymentRepository <- 저수준 CRUD
+ * + Common / Utils      : 공통적으로 사용할 수있는 유틸리티 클래스 / 라이브러리
+ */
+
+include 'codeit-external-api' // 삼지창 1
+include 'codeit-internal-api' // 삼지창 2
+include 'codeit-admin' // 삼지창 3
+
+/**
+ * 개발자가 제공하고자하는 API / WEB 를 제공을 위한
+ * - Controller  : PaymentController <- Primary Adaptor (Driving Adaptor) 모든 요청이 들어오는 입구
+ * - Application : PaymentApplication <- 요청에 따라 실제 복잡한 비지니스 로직들을 연결 및 처리 + 도메인의 상태변이 메서드를 호출하는 곳
+ */
