@@ -1,8 +1,14 @@
 package com.demo.controller.admin.web;
 
-import com.demo.repository.product.ProductRepository;
+import com.demo.application.product.ProductAdminApplication;
+import com.demo.controller.admin.dto.ProductAdminResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * ProductWebController
@@ -14,6 +20,23 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequiredArgsConstructor
 public class ProductWebController {
-    private final ProductRepository productRepository;
+    private final ProductAdminApplication productAdminApplication;
 
+    @GetMapping(value = "/admin/web/products")
+    public String products(Model model) {
+        List<ProductAdminResponseDto> products = productAdminApplication.retrieve();
+        model.addAttribute("products", products);
+        return "/products/list";
+    }
+
+    @GetMapping(value = "/admin/web/products/{id}")
+    public String product(@RequestParam Integer id, Model model) {
+        ProductAdminResponseDto product = productAdminApplication.retrieve(id);
+        model.addAttribute("id", product.getId());
+        model.addAttribute("name", product.getName());
+        model.addAttribute("price", product.getPrice());
+        model.addAttribute("stock", product.getStock());
+        model.addAttribute("deleted", product.isDeleted());
+        return "/products/detail";
+    }
 }
