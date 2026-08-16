@@ -1,5 +1,8 @@
 package com.demo.demo;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class BasicCalculator implements Calculator {
     @Override
     public long factorial(long num) {
@@ -13,11 +16,11 @@ public class BasicCalculator implements Calculator {
 
     @Override
     public long factPlus(long num1, long num2) {
-        return 0;
+        return num1 + num2;
     }
 
     @Override
     public long minus(long num1, long num2) {
-        return 0;
+        return num1 - num2;
     }
 }
