@@ -7,18 +7,12 @@ public class DemoApplication {
     public static void main(String[] args) {
 //		SpringApplication.run(DemoApplication.class, args);
 
-        Calculator basic = new BasicCalculator();
-        Calculator recursive = new RecursiveCalculator();
+        Calculator proxyCalculator1 = new ExecutionTimeCalculator(new BasicCalculator());
+        proxyCalculator1.factorial(1000);
 
-        long basicStart = System.nanoTime();
-        basic.factorial(10000);
-        long basicEnd = System.nanoTime();
-        System.out.printf("Basic Calculator의 factorial(100) 실행 시간 -> %d \n", (basicEnd - basicStart));
+        Calculator proxyCalculator2 = new ExecutionTimeCalculator(new RecursiveCalculator());
+        proxyCalculator2.factorial(1000);
 
-        long recursiveStart = System.nanoTime();
-        recursive.factorial(10000);
-        long recursiveEnd = System.nanoTime();
-        System.out.printf("Recursive Calculator의 factorial(100) 실행 시간 -> %d \n", (recursiveEnd - recursiveStart));
     }
 
 }
