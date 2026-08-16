@@ -10,14 +10,14 @@ public class DemoApplication {
         Calculator basic = new BasicCalculator();
         Calculator recursive = new RecursiveCalculator();
 
-        long basicStart = System.currentTimeMillis();
+        long basicStart = System.nanoTime();
         basic.factorial(10000);
-        long basicEnd = System.currentTimeMillis();
+        long basicEnd = System.nanoTime();
         System.out.printf("Basic Calculator의 factorial(100) 실행 시간 -> %d \n", (basicEnd - basicStart));
 
-        long recursiveStart = System.currentTimeMillis();
+        long recursiveStart = System.nanoTime();
         recursive.factorial(10000);
-        long recursiveEnd = System.currentTimeMillis();
+        long recursiveEnd = System.nanoTime();
         System.out.printf("Recursive Calculator의 factorial(100) 실행 시간 -> %d \n", (recursiveEnd - recursiveStart));
     }
 
