@@ -8,4 +8,14 @@ public class RecursiveCalculator implements Calculator {
         }
         return num * factorial(num - 1);
     }
+
+    @Override
+    public long factPlus(long num1, long num2) {
+        return 0;
+    }
+
+    @Override
+    public long minus(long num1, long num2) {
+        return 0;
+    }
 }

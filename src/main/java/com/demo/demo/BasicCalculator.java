@@ -10,4 +10,14 @@ public class BasicCalculator implements Calculator {
         }
         return result;
     }
+
+    @Override
+    public long factPlus(long num1, long num2) {
+        return 0;
+    }
+
+    @Override
+    public long minus(long num1, long num2) {
+        return 0;
+    }
 }

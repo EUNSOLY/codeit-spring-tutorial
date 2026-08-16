@@ -14,7 +14,8 @@ public class ExecutionTimeCalculator implements Calculator {
     public long factorial(long num) {
         // 핵심 연산에서는 부가기능인 실행시간을 측정해주고
         long start = System.nanoTime();
-        long result = delegate.factorial(num); // 핵심 연산인 실행시간측정은 외부에서 주입받은 delegate에게 위임한다.
+        // 핵심 연산인 실행시간측정은 외부에서 주입받은 delegate에게 위임한다.
+        long result = delegate.factorial(num);
         long end = System.nanoTime();
 
         System.out.printf("%s의 factorial(%d) 실행시간 -> %d \n",
@@ -23,5 +24,15 @@ public class ExecutionTimeCalculator implements Calculator {
                 (end - start)
         );
         return result;
+    }
+
+    @Override
+    public long factPlus(long num1, long num2) {
+        return 0;
+    }
+
+    @Override
+    public long minus(long num1, long num2) {
+        return 0;
     }
 }
