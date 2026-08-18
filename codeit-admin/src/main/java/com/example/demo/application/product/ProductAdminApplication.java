@@ -3,6 +3,7 @@ package com.example.demo.application.product;
 import com.example.demo.controller.api.dto.ProductAdminResponseDto;
 import com.example.demo.controller.api.dto.ProductAdminUpsertRequestDto;
 import com.example.demo.domain.product.Product;
+import com.example.demo.exception.DatabaseConnectionException;
 import com.example.demo.multipart.MultipartFileUpload;
 import com.example.demo.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class ProductAdminApplication {
     private final MultipartFileUpload multipartFileUpload;
 
     public List<ProductAdminResponseDto> retrieve() {
+
+        if (true) {
+            throw new DatabaseConnectionException();
+        } // 의도적으로 다른 타입의 예외를 발생시키기 위함 - true / false 바꿔가며 호출할것
         List<Product> products = productService.getProducts();
         return products.stream()
                 .map(ProductAdminResponseDto::from)

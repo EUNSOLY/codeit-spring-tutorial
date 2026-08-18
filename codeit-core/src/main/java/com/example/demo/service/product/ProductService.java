@@ -1,6 +1,7 @@
 package com.example.demo.service.product;
 
 import com.example.demo.domain.product.Product;
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.IRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class ProductService {
     public Product getProduct(Integer id) {
         Optional<Product> wrappedProduct = productRepository.findById(id);
         Product product = wrappedProduct
-                .orElseThrow(() -> new RuntimeException("찾으시는 유저가 존재하지 않습니다"));
+                .orElseThrow(UserNotFoundException::new);
         return product;
     }
 
