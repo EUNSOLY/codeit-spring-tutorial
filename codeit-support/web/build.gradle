@@ -11,6 +11,8 @@ dependencies {
     implementation project(":codeit-common")
 //	Spring MVC 기본
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 //  testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 //  testImplementation 'org.springframework.boot:spring-boot-starter-test' - 최상단 build.gradle 내 통합 테스트 라이브러리 기입했기 때문
 }
