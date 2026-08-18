@@ -5,8 +5,6 @@ import com.example.demo.common.context.UserContext;
 import com.example.demo.controller.api.dto.ProductAdminResponseDto;
 import com.example.demo.controller.api.dto.ProductAdminUpsertRequestDto;
 import com.example.demo.controller.api.dto.RequestingUserDto;
-import com.example.demo.exception.CodeitRuntimeException;
-import com.example.demo.exception.ExceptionType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,29 +36,10 @@ public class ProductApiController {
     // 2. 직접 ResponseEntity 반환 객체를 만들어서 반환
     @GetMapping(value = "/admin/api/products/{id}")
     public ResponseEntity<ProductAdminResponseDto> retrieve(@PathVariable Integer id) {
-        try {
-            ProductAdminResponseDto response = productAdminApplication.retrieve(id);
-            return ResponseEntity
-                    .status(HttpStatus.ACCEPTED)
-                    .body(response);
-        } catch (CodeitRuntimeException exception) {
-            // 내가 알고있거나 / 명시적으로 처리하고싶어하는 예외 상황에 대해 이렇게 구체적인 예외 클래스를 명시해서 처리
-            ExceptionType exceptionType = exception.getExceptionType(); // 예외에 정의된 타입(로그 레벨 등 메타정보 포함) 조회
-            log.makeLoggingEventBuilder(exceptionType.getLevel())   // ExceptionType이 갖고 있는 로그 레벨(Enum)로 로깅 이벤트 빌더 생성
-                    .setCause(exception) // 원본 예외를 cause로 설정 (스택트레이스 함께 기록됨)
-                    .log(exception.getMessage());  // 메시지 설정과 동시에 빌더를 종료하며 실제 로그를 출력 (build+log를 한번에 수행)
-
-            return ResponseEntity
-                    .status(exceptionType.getStatus())
-                    .build();
-        } catch (RuntimeException e /* 클래스 다형성에 의해 우리가 만드는 예외 Exception 들이 모두 RuntimeException 상속받기에 여기로 다 들어옴 */) {
-            // 세상에는 (라이브러리, 프레임워크 등) 너무 다양한 예외들이 존재하기에 우리가 catch 하지 못하고 놓친 예외에 대해 꼭 마지막까지 처리해줘야한다
-            // = switch 구문에서 default 와 거의 같은 목적의 코드라고 보면 된다
-            log.error("우리가 커버하지 못한 예외 발생", e);
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
+        ProductAdminResponseDto response = productAdminApplication.retrieve(id);
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body(response);
     }
 
 
@@ -72,25 +51,10 @@ public class ProductApiController {
             @RequestPart @Valid ProductAdminUpsertRequestDto request,
             @RequestPart(required = false) MultipartFile thumbnail
     ) {
-        try {
-            ProductAdminResponseDto response = productAdminApplication.create(request, thumbnail);
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(response);
-        } catch (CodeitRuntimeException exception) {
-            ExceptionType exceptionType = exception.getExceptionType();
-            log.makeLoggingEventBuilder(exceptionType.getLevel())
-                    .setCause(exception)
-                    .log(exception.getMessage());
-            return ResponseEntity
-                    .status(exceptionType.getStatus())
-                    .build();
-        } catch (RuntimeException e) {
-            log.error("우리가 커버하지 못한 예외 발생", e);
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
+        ProductAdminResponseDto response = productAdminApplication.create(request, thumbnail);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @PutMapping(value = "/admin/api/products/{id}")
