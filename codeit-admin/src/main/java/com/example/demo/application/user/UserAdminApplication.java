@@ -41,6 +41,7 @@ public class UserAdminApplication {
         return UserAdminResponseDto.from(created);
     }
 
+
     public UserAdminResponseDto update(Integer id, UserAdminUpdateRequestDto request, MultipartFile thumbnail) {
         User updating = userService.getUser(id);
         updating.update(request.getName(), request.getGrade(), request.getPoint());
