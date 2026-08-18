@@ -65,3 +65,4 @@ public class UserAdminApplication {
         userService.hardDelete(id);
     }
 }
+

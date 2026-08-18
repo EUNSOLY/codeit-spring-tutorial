@@ -1,8 +1,8 @@
 package com.example.demo.advice;
 
 import com.example.demo.advice.dto.InvalidParameterDto;
+import com.example.demo.exception.CodeitExceptionType;
 import com.example.demo.exception.CodeitRuntimeException;
-import com.example.demo.exception.ExceptionType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Void> handle(CodeitRuntimeException exception) {
         // 내가 알고 있거나 / 명시적으로 처리하고싶어하는 예외 상황에 대해 이렇게 구체적인 예외클래를 명시해서 처리 가능
 
-        ExceptionType exceptionType = exception.getExceptionType();
+        CodeitExceptionType exceptionType = exception.getExceptionType();
         log.makeLoggingEventBuilder(exceptionType.getLevel())
                 .setCause(exception)
                 .log(exception.getMessage());
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
             parameterInvalidDetails.add(eachParameterInvalidDetail);
         }
         log.warn("@RequestBody, @ModelAttribute 으로 받는 요청 DTO 객체 내 검증 실패 값이 존재 : {}", parameterInvalidDetails, exception);
-        
+
         return parameterInvalidDetails;
     }
 

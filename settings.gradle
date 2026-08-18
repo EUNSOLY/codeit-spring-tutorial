@@ -11,8 +11,9 @@ rootProject.name = 'demo'
  */
 
 
+include 'codeit-common'
 include 'codeit-support:web' // web과 관련된 공통 유틸모듈
-include 'codeit-core' // 삼지창의 목 (중심)
+include 'codeit-core' // 삼지창의 목 (중심 - 도메인 관련)
 
 /**
  * 어떤 API / WEB 을 개발하든 도메인이 가장 핵심이며 공통부분 (core)
@@ -32,3 +33,4 @@ include 'codeit-admin' // 삼지창 3
  * - Controller  : PaymentController <- Primary Adaptor (Driving Adaptor) 모든 요청이 들어오는 입구
  * - Application : PaymentApplication <- 요청에 따라 실제 복잡한 비지니스 로직들을 연결 및 처리 + 도메인의 상태변이 메서드를 호출하는 곳
  */
+

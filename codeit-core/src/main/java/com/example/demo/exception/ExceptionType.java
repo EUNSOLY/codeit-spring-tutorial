@@ -12,7 +12,7 @@ import java.net.HttpURLConnection;
 @Getter
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public enum ExceptionType {
+public enum ExceptionType implements CodeitExceptionType {
     USER_NOT_FOUND(
             Level.WARN,
             HttpURLConnection.HTTP_NOT_FOUND,
