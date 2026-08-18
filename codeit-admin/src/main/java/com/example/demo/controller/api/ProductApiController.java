@@ -6,6 +6,7 @@ import com.example.demo.controller.api.dto.ProductAdminResponseDto;
 import com.example.demo.controller.api.dto.ProductAdminUpsertRequestDto;
 import com.example.demo.controller.api.dto.RequestingUserDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
  * 1. 그 중에서 "Product"ApiController 상품을 등록하고 삭제하기 위한 API
  * - API이기 때문에 @Controller + @ResponseBody을 같이 쓴 것과 같은 @RestController 사용
  */
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ProductApiController {
@@ -33,10 +35,17 @@ public class ProductApiController {
     // 2. 직접 ResponseEntity 반환 객체를 만들어서 반환
     @GetMapping(value = "/admin/api/products/{id}")
     public ResponseEntity<ProductAdminResponseDto> retrieve(@PathVariable Integer id) {
-        ProductAdminResponseDto response = productAdminApplication.retrieve(id);
-        return ResponseEntity
-                .status(HttpStatus.ACCEPTED)
-                .body(response);
+        try {
+            ProductAdminResponseDto response = productAdminApplication.retrieve(id);
+            return ResponseEntity
+                    .status(HttpStatus.ACCEPTED)
+                    .body(response);
+        } catch (RuntimeException e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
     }
 
 
