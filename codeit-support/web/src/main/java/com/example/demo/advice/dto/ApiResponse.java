@@ -1,5 +1,7 @@
 package com.example.demo.advice.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,8 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"success", "message", "content"})
 
 /**
  *  - ApiResponse<T>
