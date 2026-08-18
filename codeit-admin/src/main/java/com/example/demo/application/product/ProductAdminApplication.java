@@ -7,14 +7,17 @@ import com.example.demo.exception.CodeitRuntimeException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.multipart.MultipartFileUpload;
 import com.example.demo.service.product.ProductService;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class ProductAdminApplication {
     private final ProductService productService;
@@ -31,7 +34,7 @@ public class ProductAdminApplication {
                 .toList();
     }
 
-    public ProductAdminResponseDto retrieve(Integer id) {
+    public ProductAdminResponseDto retrieve(@Min(1) Integer id) {
         Product retrieved = productService.getProduct(id);
         return ProductAdminResponseDto.from(retrieved);
     }

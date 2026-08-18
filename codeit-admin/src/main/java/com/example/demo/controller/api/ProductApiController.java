@@ -6,14 +6,17 @@ import com.example.demo.controller.api.dto.ProductAdminResponseDto;
 import com.example.demo.controller.api.dto.ProductAdminUpsertRequestDto;
 import com.example.demo.controller.api.dto.RequestingUserDto;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
 
 /**
  * ProductApiController
@@ -22,6 +25,7 @@ import java.util.List;
  * - API이기 때문에 @Controller + @ResponseBody을 같이 쓴 것과 같은 @RestController 사용
  */
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 public class ProductApiController {
@@ -59,7 +63,7 @@ public class ProductApiController {
 
     @PutMapping(value = "/admin/api/products/{id}")
     public ProductAdminResponseDto update(
-            @PathVariable Integer id,
+            @PathVariable @Min(1) Integer id,
             @RequestPart ProductAdminUpsertRequestDto request,
             @RequestPart(required = false) MultipartFile thumbnail
     ) {
