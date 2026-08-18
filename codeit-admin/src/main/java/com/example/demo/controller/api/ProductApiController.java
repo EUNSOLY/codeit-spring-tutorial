@@ -7,6 +7,7 @@ import com.example.demo.controller.api.dto.ProductAdminUpsertRequestDto;
 import com.example.demo.controller.api.dto.RequestingUserDto;
 import com.example.demo.exception.CodeitRuntimeException;
 import com.example.demo.exception.ExceptionType;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -65,13 +66,31 @@ public class ProductApiController {
 
     // 응답에 상태코드를 넣는 방법 1.
     // 1. 메서드 상단 어노테이션을 통해 명시 - 쉽지만 문제는 그 메서드에서 나가는 모든 응답에 그 상태코드가 들어감 = 익셉션에 따른 다른 상태코드를 반환하고싶을때 어쩔도리가 없음
-    @ResponseStatus(HttpStatus.CREATED)
+//    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/admin/api/products")
-    public ProductAdminResponseDto create(
-            @RequestPart ProductAdminUpsertRequestDto request,
+    public ResponseEntity<ProductAdminResponseDto> create(
+            @RequestPart @Valid ProductAdminUpsertRequestDto request,
             @RequestPart(required = false) MultipartFile thumbnail
     ) {
-        return productAdminApplication.create(request, thumbnail);
+        try {
+            ProductAdminResponseDto response = productAdminApplication.create(request, thumbnail);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(response);
+        } catch (CodeitRuntimeException exception) {
+            ExceptionType exceptionType = exception.getExceptionType();
+            log.makeLoggingEventBuilder(exceptionType.getLevel())
+                    .setCause(exception)
+                    .log(exception.getMessage());
+            return ResponseEntity
+                    .status(exceptionType.getStatus())
+                    .build();
+        } catch (RuntimeException e) {
+            log.error("우리가 커버하지 못한 예외 발생", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
     }
 
     @PutMapping(value = "/admin/api/products/{id}")
