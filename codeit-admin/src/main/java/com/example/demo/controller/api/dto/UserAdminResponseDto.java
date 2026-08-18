@@ -1,7 +1,7 @@
 package com.example.demo.controller.api.dto;
 
-import com.example.demo.repository.user.User;
-import com.example.demo.repository.user.UserGrade;
+import com.example.demo.domain.user.User;
+import com.example.demo.domain.user.UserGrade;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -1,6 +1,6 @@
 package com.example.demo.service.user;
 
-import com.example.demo.repository.user.User;
+import com.example.demo.domain.user.User;
 import com.example.demo.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ public class UserService {
 
     public User getUser(Integer id) {
         Optional<User> wrappedUser = userRepository.findById(id);
-                 User         user = wrappedUser
-                         .orElseThrow(() -> new RuntimeException("찾으시는 유저가 존재하지 않습니다"));
+        User user = wrappedUser
+                .orElseThrow(() -> new RuntimeException("찾으시는 유저가 존재하지 않습니다"));
         return user;
     }
 
@@ -31,15 +31,15 @@ public class UserService {
 
     public User create(User entity) {
         Optional<User> wrappedCreated = userRepository.create(entity);
-                 User         created = wrappedCreated
-                         .orElseThrow(() -> new RuntimeException("유저가 정상적으로 생성되지 않습니다"));
+        User created = wrappedCreated
+                .orElseThrow(() -> new RuntimeException("유저가 정상적으로 생성되지 않습니다"));
         return created;
     }
 
     public User update(User entity) {
         Optional<User> wrappedUser = userRepository.update(entity);
-                 User         user = wrappedUser
-                         .orElseThrow(() -> new RuntimeException("업데이트가 정상적으로 되지 않습니다"));
+        User user = wrappedUser
+                .orElseThrow(() -> new RuntimeException("업데이트가 정상적으로 되지 않습니다"));
         return user;
     }
 

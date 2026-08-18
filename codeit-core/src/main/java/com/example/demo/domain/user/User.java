@@ -16,6 +16,7 @@ public class User extends BaseEntity {
     private String name; // 사용자명
     private UserGrade grade = UserGrade.BRONZE;
     private int point = 0;
+    private String thumbnail;
 
     private User(Integer id, Integer createdByUserId, String name) {
         super(id, createdByUserId);
@@ -41,6 +42,11 @@ public class User extends BaseEntity {
         this.grade = grade;
         this.point = point;
         super.updated();
+    }
+
+    // 프로필 사진 추가
+    public void upload(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
 }

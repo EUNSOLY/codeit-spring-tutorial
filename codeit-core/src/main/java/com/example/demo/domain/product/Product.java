@@ -16,6 +16,7 @@ public class Product extends BaseEntity {
     private String name; // 상품명
     private int price; // 가격
     private int stock; // 재고
+    private String thumbnail; // 상품 사진
 
     private Product(Integer id, Integer createdByUserId, String name, int price, int stock) {
         super(id, createdByUserId);
@@ -51,5 +52,10 @@ public class Product extends BaseEntity {
         this.price = price;
         this.stock = stock;
         super.updated();
+    }
+
+    // 사진 추가
+    public void upload(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

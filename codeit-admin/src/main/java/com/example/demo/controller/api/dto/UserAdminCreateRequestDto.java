@@ -1,6 +1,6 @@
 package com.example.demo.controller.api.dto;
 
-import com.example.demo.repository.user.User;
+import com.example.demo.domain.user.User;
 
 public class UserAdminCreateRequestDto extends RequestingUserDto {
     private final String name;

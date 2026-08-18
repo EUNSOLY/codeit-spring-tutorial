@@ -1,6 +1,6 @@
 package com.example.demo.controller.api.dto;
 
-import com.example.demo.repository.user.UserGrade;
+import com.example.demo.domain.user.UserGrade;
 import lombok.Getter;
 
 @Getter
