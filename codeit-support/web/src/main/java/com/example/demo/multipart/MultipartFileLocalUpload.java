@@ -1,8 +1,7 @@
 package com.example.demo.multipart;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -12,18 +11,14 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 @Slf4j
-@Component
+@RequiredArgsConstructor
 public class MultipartFileLocalUpload extends MultipartFileAbstractUpload {
     private final String directory;
-
-    public MultipartFileLocalUpload(@Value("${file.upload-directory}") String directory) {
-        this.directory = directory;
-    }
 
     @Override
     protected String generate(MultipartFile file) {
         String original = file.getOriginalFilename();
-        String sanitized = super.sanitize(original);
+        String sanitized = MultipartFileUtils.sanitize(original);
         return UUID.randomUUID() + "_" + sanitized;
     }
 
