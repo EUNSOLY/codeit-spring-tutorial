@@ -3,7 +3,8 @@ package com.example.demo.application.product;
 import com.example.demo.controller.api.dto.ProductAdminResponseDto;
 import com.example.demo.controller.api.dto.ProductAdminUpsertRequestDto;
 import com.example.demo.domain.product.Product;
-import com.example.demo.exception.DatabaseConnectionException;
+import com.example.demo.exception.CodeitRuntimeException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.multipart.MultipartFileUpload;
 import com.example.demo.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ProductAdminApplication {
     public List<ProductAdminResponseDto> retrieve() {
 
         if (true) {
-            throw new DatabaseConnectionException();
+            throw new CodeitRuntimeException(ExceptionType.DATABASE_CONNECTION_FAILED);
         } // 의도적으로 다른 타입의 예외를 발생시키기 위함 - true / false 바꿔가며 호출할것
         List<Product> products = productService.getProducts();
         return products.stream()

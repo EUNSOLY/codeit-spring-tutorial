@@ -1,7 +1,8 @@
 package com.example.demo.service.product;
 
 import com.example.demo.domain.product.Product;
-import com.example.demo.exception.UserNotFoundException;
+import com.example.demo.exception.CodeitRuntimeException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.repository.IRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class ProductService {
     public Product getProduct(Integer id) {
         Optional<Product> wrappedProduct = productRepository.findById(id);
         Product product = wrappedProduct
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new CodeitRuntimeException(ExceptionType.USER_NOT_FOUND));
         return product;
     }
 
