@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @ToString
 @AllArgsConstructor
+@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     /**
@@ -29,5 +27,6 @@ public class User {
     private Integer age;
     private String job;
     private String specialty;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 }
