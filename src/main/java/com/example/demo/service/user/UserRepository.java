@@ -1,5 +1,6 @@
-package com.example.demo.service;
+package com.example.demo.service.user;
 
+import com.example.demo.service.IRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.controller.dto.UserResponseDto;
-import com.example.demo.service.UserService;
+import com.example.demo.service.user.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

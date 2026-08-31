@@ -1,6 +1,6 @@
 package com.example.demo.controller.dto;
 
-import com.example.demo.service.User;
+import com.example.demo.service.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

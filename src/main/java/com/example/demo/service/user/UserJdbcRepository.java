@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -138,7 +138,6 @@ public class UserJdbcRepository {
             }
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "유저 정보가 저장되지 않았습니다 - id : " + createdUserId);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원에 대한 접근에 문제가 있습니다.");
         } finally {
             // 자원반납
