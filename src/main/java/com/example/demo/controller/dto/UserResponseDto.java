@@ -1,5 +1,6 @@
 package com.example.demo.controller.dto;
 
+import com.example.demo.service.message.Message;
 import com.example.demo.service.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -28,6 +30,7 @@ public class UserResponseDto {
     private LocalDateTime createdAt;
     private String address;
     private String postcode;
+    private List<MessageResponseDto> messages;
 
     public static UserResponseDto from(User entity) {
         return new UserResponseDto(
@@ -38,7 +41,14 @@ public class UserResponseDto {
                 entity.getSpecialty(),
                 entity.getCreatedAt(),
                 null,
+                null,
                 null
         );
+    }
+
+    public void setMessage(List<Message> messages) {
+        this.messages = messages.stream()
+                .map(MessageResponseDto::from)
+                .toList();
     }
 }

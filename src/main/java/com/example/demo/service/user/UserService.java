@@ -1,6 +1,8 @@
 package com.example.demo.service.user;
 
 import com.example.demo.controller.dto.UserResponseDto;
+import com.example.demo.service.message.Message;
+import com.example.demo.service.message.MessageJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final UserJdbcRepository userJdbcRepository;
+    private final MessageJdbcRepository messageJdbcRepository;
 
 
     public UserResponseDto findById(Integer id) {
@@ -39,7 +42,12 @@ public class UserService {
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
         try {
             User user = userJdbcRepository.save(name, age, job, specialty);
-            return UserResponseDto.from(user);
+            List<Message> messages = messageJdbcRepository.save(user.getId(), user.getName() + "님 가입을 환영합니다.");
+
+            UserResponseDto userResponse = UserResponseDto.from(user);
+            userResponse.setMessage(messages);
+            
+            return userResponse;
         } catch (SQLException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
         }
