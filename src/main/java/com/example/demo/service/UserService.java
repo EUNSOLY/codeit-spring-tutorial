@@ -16,6 +16,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserJdbcRepository userJdbcRepository;
 
+
     public UserResponseDto findById(Integer id) {
         try {
             User user = userJdbcRepository.findById(id);

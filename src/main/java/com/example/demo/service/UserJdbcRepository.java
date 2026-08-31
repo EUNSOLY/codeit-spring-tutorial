@@ -1,12 +1,18 @@
 package com.example.demo.service;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.*;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.ZoneId;
 
 @Slf4j
@@ -21,13 +27,26 @@ public class UserJdbcRepository {
     @Value("${spring.datasource.password}")
     private String password;
 
+    @Value("${spring.datasource.driver-class-name}")
+    private String driver;
+
+    private DataSource dataSource() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(url);
+        config.setUsername(username);
+        config.setPassword(password);
+        config.setDriverClassName(driver);
+
+        return new HikariDataSource(config);
+    }
+
     public User findById(int userId) throws SQLException {
         Connection connection = null; // 1.
         Statement statement = null;   // 2.
         ResultSet resultSet = null;   // 3.
 
         try {
-            connection = DriverManager.getConnection(url, username, password); // // 1. DB에 연결해서 Connection 객체 생성
+            connection = dataSource().getConnection(); // 1. Hikari 커넥션 풀에서 Connection 객체 하나를 꺼내옴
             statement = connection.createStatement(); // 2. SQL을 실행할 Statement 객체 생성
             resultSet = statement.executeQuery("SELECT * FROM \"user\"WHERE id = " + userId); // 3. SQL 실행 후 결과를 ResultSet에 저장
 
