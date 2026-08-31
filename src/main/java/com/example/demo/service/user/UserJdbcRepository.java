@@ -3,6 +3,7 @@ package com.example.demo.service.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -95,11 +96,12 @@ public class UserJdbcRepository {
         }
     }
 
-    public User save(final Connection connection, String name, Integer age, String job, String specialty) throws SQLException {
+    public User save(String name, Integer age, String job, String specialty) throws SQLException {
         PreparedStatement statement = null;   // 2.
         ResultSet resultSet = null;   // 3.
 
         try {
+            Connection connection = DataSourceUtils.getConnection(dataSource);
             statement = connection.prepareStatement("INSERT INTO \"user\" (name, age, job, specialty, created_at) VALUES(?,?,?,?,?)");
             statement.setString(1, name);
             statement.setInt(2, age);
@@ -141,7 +143,6 @@ public class UserJdbcRepository {
             // 자원반납
             if (resultSet != null) resultSet.close();   // 1
             if (statement != null) statement.close();   // 2
-            if (connection != null) connection.close(); // 3
         }
     }
 }

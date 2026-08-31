@@ -5,7 +5,9 @@ import com.example.demo.service.message.Message;
 import com.example.demo.service.message.MessageJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.datasource.ConnectionHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
@@ -44,11 +46,13 @@ public class UserService {
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
         Connection connection = null;
         try {
+            TransactionSynchronizationManager.initSynchronization();
             connection = dataSource.getConnection();    // Connection 생성
             connection.setAutoCommit(false);            // Connection Auto-Commit 옵션 끄기
+            TransactionSynchronizationManager.bindResource(dataSource, new ConnectionHolder(connection));
 
-            User user = userJdbcRepository.save(connection, name, age, job, specialty);
-            List<Message> messages = messageJdbcRepository.save(connection, user.getId(), user.getName() + "님 가입을 환영합니다.");
+            User user = userJdbcRepository.save(name, age, job, specialty);
+            List<Message> messages = messageJdbcRepository.save(user.getId(), user.getName() + "님 가입을 환영합니다.");
 
             connection.commit();                        // (A) Commit
 
@@ -64,7 +68,11 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
         } finally {
             try {
+                TransactionSynchronizationManager.unbindResource(dataSource);
+                connection.setAutoCommit(true);
                 connection.close();                     // (C) Close
+                TransactionSynchronizationManager.clearSynchronization();
+
             } catch (final SQLException ignored) {
             }
         }

@@ -3,6 +3,7 @@ package com.example.demo.service.message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -54,16 +55,18 @@ public class MessageJdbcRepository {
         }
     }
 
-    public List<Message> save(final Connection connection, Integer userId, String message) throws SQLException {
+    public List<Message> save(Integer userId, String message) throws SQLException {
 
         if (true) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "트랜잭션 롤백 여부를 확인하기 위한 의도된 예외");
         }
 
+
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         try {
+            Connection connection = DataSourceUtils.getConnection(dataSource);
             statement = connection.prepareStatement("INSERT INTO \"message\" (user_id, message,created_at) VALUES(?,?,?)");
             statement.setInt(1, userId);
             statement.setString(2, message);
@@ -102,7 +105,6 @@ public class MessageJdbcRepository {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원에 대한 접근에 문제가 있습니다.", e);
         } finally {
-            if (connection != null) connection.close();
             if (statement != null) statement.close();
             if (resultSet != null) resultSet.close();
         }
