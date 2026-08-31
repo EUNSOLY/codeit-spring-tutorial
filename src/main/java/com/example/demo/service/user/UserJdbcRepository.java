@@ -95,13 +95,11 @@ public class UserJdbcRepository {
         }
     }
 
-    public User save(String name, Integer age, String job, String specialty) throws SQLException {
-        Connection connection = null; // 1.
+    public User save(final Connection connection, String name, Integer age, String job, String specialty) throws SQLException {
         PreparedStatement statement = null;   // 2.
         ResultSet resultSet = null;   // 3.
 
         try {
-            connection = dataSource.getConnection();
             statement = connection.prepareStatement("INSERT INTO \"user\" (name, age, job, specialty, created_at) VALUES(?,?,?,?,?)");
             statement.setString(1, name);
             statement.setInt(2, age);

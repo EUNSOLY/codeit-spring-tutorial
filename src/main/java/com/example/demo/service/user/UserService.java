@@ -8,13 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
+    private final DataSource dataSource;
     private final UserJdbcRepository userJdbcRepository;
     private final MessageJdbcRepository messageJdbcRepository;
 
@@ -40,16 +42,31 @@ public class UserService {
     }
 
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
+        Connection connection = null;
         try {
-            User user = userJdbcRepository.save(name, age, job, specialty);
-            List<Message> messages = messageJdbcRepository.save(user.getId(), user.getName() + "님 가입을 환영합니다.");
+            connection = dataSource.getConnection();    // Connection 생성
+            connection.setAutoCommit(false);            // Connection Auto-Commit 옵션 끄기
+
+            User user = userJdbcRepository.save(connection, name, age, job, specialty);
+            List<Message> messages = messageJdbcRepository.save(connection, user.getId(), user.getName() + "님 가입을 환영합니다.");
+
+            connection.commit();                        // (A) Commit
 
             UserResponseDto userResponse = UserResponseDto.from(user);
             userResponse.setMessage(messages);
-            
+
             return userResponse;
         } catch (SQLException e) {
+            try {
+                connection.rollback();                  // (B) Rollback
+            } catch (final SQLException ignored) {
+            }
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
+        } finally {
+            try {
+                connection.close();                     // (C) Close
+            } catch (final SQLException ignored) {
+            }
         }
     }
 }
