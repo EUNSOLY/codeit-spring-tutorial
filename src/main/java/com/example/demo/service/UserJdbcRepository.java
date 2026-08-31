@@ -8,9 +8,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +23,15 @@ public class UserJdbcRepository {
 
     public User findById(int userId) throws SQLException {
         Connection connection = null; // 1.
-        Statement statement = null;   // 2.
+        PreparedStatement statement = null;   // 2.
         ResultSet resultSet = null;   // 3.
 
         try {
             connection = dataSource.getConnection(); // 1. Hikari 커넥션 풀에서 Connection 객체 하나를 꺼내옴
-            statement = connection.createStatement(); // 2. SQL을 실행할 Statement 객체 생성
-            resultSet = statement.executeQuery("SELECT * FROM \"user\"WHERE id = " + userId); // 3. SQL 실행 후 결과를 ResultSet에 저장
+            statement = connection.prepareStatement("SELECT * FROM \"user\" WHERE id = ?"); // 2. SQL을 실행할 Statement 객체 생성
+            statement.setInt(1, userId); // 3. SQL 실행
+            resultSet = statement.executeQuery();// 3. 결과를 ResultSet에 저장
+
 
             if (resultSet.next()) {
                 return new User(
@@ -59,14 +61,14 @@ public class UserJdbcRepository {
     }
 
     public List<User> findAll() throws SQLException {
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
+        Connection connection = null; // 1.
+        PreparedStatement statement = null;   // 2.
+        ResultSet resultSet = null;   // 3.
 
         try {
             connection = dataSource.getConnection();
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM \"user\"");
+            statement = connection.prepareStatement("SELECT * FROM \"user\"");
+            resultSet = statement.executeQuery();
 
             List<User> users = new ArrayList<>();
             while (resultSet.next()) {
