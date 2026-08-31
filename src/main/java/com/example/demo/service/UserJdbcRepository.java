@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -54,5 +56,42 @@ public class UserJdbcRepository {
             if (connection != null) connection.close(); // 3.
         }
 
+    }
+
+    public List<User> findAll() throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM \"user\"");
+
+            List<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                users.add(
+                        new User(
+                                resultSet.getInt("id"),
+                                resultSet.getString("name"),
+                                resultSet.getInt("age"),
+                                resultSet.getString("job"),
+                                resultSet.getString("specialty"),
+                                resultSet.getTimestamp("created_at")
+                                        .toInstant()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDateTime()
+                        )
+                );
+            }
+
+            return users;
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원에 대한 접근에 문제가 있습니다.");
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
     }
 }
