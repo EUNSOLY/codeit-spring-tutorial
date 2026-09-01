@@ -56,6 +56,7 @@ public class UserJdbcTemplateRepository {
     }
 
     public User save(String name, Integer age, String job, String specialty) {
+
         String createUserQuery = "INSERT INTO \"user\" (name, age, job, specialty, created_at) VALUES(?, ?, ?, ?, ?)";
         Object[] createUserParams = new Object[]{name, age, job, specialty, LocalDateTime.now()};
         this.jdbcTemplate.update(
