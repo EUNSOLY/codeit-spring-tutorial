@@ -60,4 +60,13 @@ public class MessageJdbcTemplateRepository {
                 createdMessageId
         ).toList();
     }
+
+    public void deleteByUserId(Integer userId) {
+        String deleteUserMessageQuery = "DELETE FROM \"message\" WHERE user_id = ?";
+        Object[] deleteUserMessageParams = new Object[]{userId};
+        this.jdbcTemplate.update(
+                deleteUserMessageQuery,
+                deleteUserMessageParams
+        );
+    }
 }

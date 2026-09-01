@@ -86,4 +86,13 @@ public class UserJdbcTemplateRepository {
                 getUserParams
         );
     }
+
+    public void delete(Integer userId) {
+        String deleteUserQuery = "DELETE FROM \"user\" WHERE id = ?";
+        Object[] deleteUserParams = new Object[]{userId};
+        this.jdbcTemplate.update(
+                deleteUserQuery,
+                deleteUserParams
+        );
+    }
 }

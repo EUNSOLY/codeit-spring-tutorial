@@ -36,4 +36,9 @@ public class UserService {
 
         return userResponse;
     }
+
+    public void delete(Integer id) {
+        userJdbcTemplateRepository.delete(id);
+        messageJdbcTemplateRepository.deleteByUserId(id);
+    }
 }
