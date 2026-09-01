@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -55,7 +55,35 @@ public class UserJdbcTemplateRepository {
         ).toList();
     }
 
-    public User save(String name, Integer age, String job, String specialty) throws SQLException {
-        return null;
+    public User save(String name, Integer age, String job, String specialty) {
+        String createUserQuery = "INSERT INTO \"user\" (name, age, job, specialty, created_at) VALUES(?, ?, ?, ?, ?)";
+        Object[] createUserParams = new Object[]{name, age, job, specialty, LocalDateTime.now()};
+        this.jdbcTemplate.update(
+                createUserQuery,
+                createUserParams
+        );
+        // (B) SELECT id - MySQL:last_insert_id()->id / PostgresQL:currval()->lastval/lastval()->lastval
+        String lastInsertIdQuery = "SELECT lastval()"; // 마지막 저장 데이터 ID
+        Integer createdUserId = this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+
+
+        String getUserQuery = "SELECT * FROM \"user\" WHERE id = ?";
+        Integer getUserParams = createdUserId;
+
+        return this.jdbcTemplate.queryForObject(
+                getUserQuery,
+                (resultSet, rowNum) -> new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getInt("age"),
+                        resultSet.getString("job"),
+                        resultSet.getString("specialty"),
+                        resultSet.getTimestamp("created_at")
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDateTime()
+                ),
+                getUserParams
+        );
     }
 }
