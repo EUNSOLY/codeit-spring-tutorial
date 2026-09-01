@@ -15,7 +15,7 @@ import java.util.List;
 public class UserJdbcTemplateRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public User findById(int userId) throws SQLException {
+    public User findById(int userId) {
         String getUserQuery = "SELECT * FROM \"user\" WHERE id = ?";
         int getUserParams = userId;
 
@@ -36,8 +36,23 @@ public class UserJdbcTemplateRepository {
         );
     }
 
-    public List<User> findAll() throws SQLException {
-        return null;
+    public List<User> findAll() {
+        String getUserQuery = "SELECT * FROM \"user\"";
+
+        return this.jdbcTemplate.queryForStream(
+                getUserQuery,
+                (resultSet, rowNum) -> new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getInt("age"),
+                        resultSet.getString("job"),
+                        resultSet.getString("specialty"),
+                        resultSet.getTimestamp("created_at")
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDateTime()
+                )
+        ).toList();
     }
 
     public User save(String name, Integer age, String job, String specialty) throws SQLException {
