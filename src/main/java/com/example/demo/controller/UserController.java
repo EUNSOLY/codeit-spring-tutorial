@@ -10,7 +10,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -40,10 +42,14 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserCreateRequestDto request) {
-        UserResponseDto user = userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
-        return ResponseEntity
+        try {
+            UserResponseDto user = userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+            return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
-                .status(HttpStatus.CREATED) // 1. HTTP Status Code
-                .body(user);                // 2. 결과 객체(User)
+                    .status(HttpStatus.CREATED) // 1. HTTP Status Code
+                    .body(user);                // 2. 결과 객체(User)
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.", e);
+        }
     }
 }

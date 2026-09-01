@@ -21,11 +21,12 @@ public class UserService {
     private final DataSource dataSource;
     private final UserJdbcRepository userJdbcRepository;
     private final MessageJdbcRepository messageJdbcRepository;
+    private final UserJdbcTemplateRepository userJdbcTemplateRepository;
 
 
     public UserResponseDto findById(Integer id) {
         try {
-            User user = userJdbcRepository.findById(id);
+            User user = userJdbcTemplateRepository.findById(id);
             return UserResponseDto.from(user);
         } catch (SQLException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
@@ -43,7 +44,7 @@ public class UserService {
         }
     }
 
-    public UserResponseDto save(String name, Integer age, String job, String specialty) {
+    public UserResponseDto save(String name, Integer age, String job, String specialty) throws SQLException {
         Connection connection = null;
         try {
             TransactionSynchronizationManager.initSynchronization();
@@ -61,20 +62,13 @@ public class UserService {
 
             return userResponse;
         } catch (SQLException e) {
-            try {
-                connection.rollback();                  // (B) Rollback
-            } catch (final SQLException ignored) {
-            }
+            connection.rollback();                  // (B) Rollback
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
         } finally {
-            try {
-                TransactionSynchronizationManager.unbindResource(dataSource);
-                connection.setAutoCommit(true);
-                connection.close();                     // (C) Close
-                TransactionSynchronizationManager.clearSynchronization();
-
-            } catch (final SQLException ignored) {
-            }
+            TransactionSynchronizationManager.unbindResource(dataSource);
+            connection.setAutoCommit(true);
+            connection.close();                     // (C) Close
+            TransactionSynchronizationManager.clearSynchronization();
         }
     }
 }
