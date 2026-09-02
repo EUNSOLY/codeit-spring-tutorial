@@ -2,15 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
-import com.example.demo.repository.Message;
-import com.example.demo.repository.MessageJdbcApiRepository;
-import com.example.demo.repository.User;
-import com.example.demo.repository.UserJdbcApiRepository;
+import com.example.demo.repository.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -21,12 +17,13 @@ import java.util.List;
 public class UserService {
     private final UserJdbcApiRepository userJdbcApiRepository;
     private final MessageJdbcApiRepository messageJdbcApiRepository;
-    private final TransactionTemplate transactionTemplate;
+    private final UserJdbcTemplateRepository userJdbcTemplateRepository;
+    private final MessageJdbcTemplateRepository messageJdbcTemplateRepository;
 
 
     public UserResponseDto findById(@NonNull Integer id) throws SQLException {
-        User retrievedUser = userJdbcApiRepository.findById(id);
-        List<Message> messages = messageJdbcApiRepository.findByUserId(id);
+        User retrievedUser = userJdbcTemplateRepository.findById(id);
+        List<Message> messages = messageJdbcTemplateRepository.findByUserId(id);
         return UserResponseDto.from(retrievedUser, messages);
     }
 
@@ -39,8 +36,8 @@ public class UserService {
 //          noRollbackFor = RuntimeException.class
     )
     public UserResponseDto create(UserCreateRequestDto request) {
-        User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
-        Message createdMessages = messageJdbcApiRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
+        User createdUser = userJdbcTemplateRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        Message createdMessages = messageJdbcTemplateRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
         return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
     }
 }
