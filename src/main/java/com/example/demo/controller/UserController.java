@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
 import com.example.demo.service.UserService;
 import lombok.NonNull;
@@ -15,10 +16,15 @@ import java.sql.SQLException;
 public class UserController {
     private final UserService userService;
 
-
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{id}")
     public UserResponseDto retrieve(@PathVariable @NonNull Integer id) throws SQLException {
         return userService.findById(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping()
+    public UserResponseDto create(@RequestBody UserCreateRequestDto request) throws SQLException {
+        return userService.create(request);
     }
 }

@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,7 @@ public class MessageJdbcApiRepository {
                         resultSet.getInt("id"),
                         resultSet.getInt("user_id"),
                         resultSet.getString("message"),
-                        resultSet.getTimestamp("create_at")
+                        resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
                                 .toLocalDateTime()
@@ -50,4 +48,53 @@ public class MessageJdbcApiRepository {
         }
     }
 
+    public Message create(Integer userId, String message) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("INSERT INTO \"message\" (user_id, message, created_at) VALUES (?,?,?);");
+            statement.setInt(1, userId);
+            statement.setString(2, message);
+            statement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            statement.executeUpdate();
+
+            // 방금 저장한 MessageId
+            Integer createdMessageId = null;
+            statement = connection.prepareStatement("SELECT lastval();");
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                createdMessageId = resultSet.getInt("lastval");
+            }
+
+            // SELECT 메세지 정보
+            statement = connection.prepareStatement("SELECT * FROM \"message\" WHERE id = ?");
+            
+            statement.setInt(1, createdMessageId);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return new Message(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getString("message"),
+                        resultSet.getTimestamp("created_at")
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDateTime()
+                );
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (null != resultSet) resultSet.close();
+            if (null != statement) statement.close();
+            if (null != connection) connection.close();
+        }
+
+    }
 }

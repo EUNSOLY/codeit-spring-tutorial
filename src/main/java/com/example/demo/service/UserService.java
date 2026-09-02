@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
 import com.example.demo.repository.Message;
 import com.example.demo.repository.MessageJdbcApiRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,5 +24,12 @@ public class UserService {
         User retrievedUser = userJdbcApiRepository.findById(id);
         List<Message> messages = messageJdbcApiRepository.findByUserId(id);
         return UserResponseDto.from(retrievedUser, messages);
+    }
+
+    public UserResponseDto create(UserCreateRequestDto request) throws SQLException {
+        User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        Message createdMessages = messageJdbcApiRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
+        return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
+
     }
 }
