@@ -8,12 +8,13 @@ import com.example.demo.repository.User;
 import com.example.demo.repository.UserJdbcApiRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.datasource.ConnectionHolder;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -31,32 +32,27 @@ public class UserService {
         return UserResponseDto.from(retrievedUser, messages);
     }
 
+
     public UserResponseDto create(UserCreateRequestDto request) throws SQLException {
-        TransactionSynchronizationManager.initSynchronization();  // 트랜잭션 동기화 : 초기화 (활성화) - bindResource 사용 전 반드시 선행되어야 함
-
-        // (1) Connection 획득한 곳에서
-        Connection connection = dataSource.getConnection();
-        connection.setAutoCommit(false); // * 중요 : 자동 커밋이 꺼진(OFF) 단 하나의 공용 Connection - 그래야 이 Connection 내부에서 실행되는 모든 쿼리들은 각각 쿼리 실행 시 데이터베이스 내 최종 반영되지 않고 임시 저장소에서 대기할 수 있다
-
-        TransactionSynchronizationManager.bindResource(dataSource, new ConnectionHolder(connection)); // 트랜잭션 동기화 : 쓰기
-
+        PlatformTransactionManager platformTransactionManager = new DataSourceTransactionManager(dataSource);  // 트랜잭션 매니저 생성 - 내부적으로 dataSource 통해 Connection 관리
+        // 트랜잭션 시작(사전준비) : Connection 대여 > 자동 커밋 끄기(OFF) > TransactionSynchronizationManager로 ThreadLocal에 Connection 저장
+        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
+                new DefaultTransactionDefinition() // 격리 수준/전파 방식 등 기본 트랜잭션 속성
+        );
+        
         try {
             User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
             Message createdMessages = messageJdbcApiRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
             UserResponseDto response = UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
 
-            connection.commit(); // * 자동 커밋이 꺼져있기때문에(OFF) 임시 저장소에 쌓여있는 그동안의 쿼리 결과들을 수동 커밋 COMMIT 통해 단 한방에 데이터베이스에 그 모든것들을 최종 반영해야한다
+            // 트랜잭션 종료(사후정리-성공) : 실제 COMMIT > ThreadLocal에서 Connection 삭제 > 자동 커밋 켜기(ON) > Connection 반환
+            platformTransactionManager.commit(transactionStatus); // * 자동 커밋이 꺼져있기때문에(OFF) 임시 저장소에 쌓여있는 그동안의 쿼리 결과들을 수동 커밋 COMMIT 통해 단 한방에 데이터베이스에 그 모든것들을 최종 반영해야한다
 
             return response;
         } catch (SQLException e) {
-            connection.rollback(); // * 자동 커밋이 꺼져있기때문에(OFF) 임시 저장소에 쌓여있는 그동안의 쿼리 결과들을 ROLLBACK 통해 단 한방에 날려버릴 수 있다
+            // 트랜잭션 종료(사후정리-실패) : 실제 ROLLBACK > ThreadLocal에서 Connection 삭제 > 자동 커밋 켜기(ON) > Connection 반환
+            platformTransactionManager.rollback(transactionStatus); // * 자동 커밋이 꺼져있기때문에(OFF) 임시 저장소에 쌓여있는 그동안의 쿼리 결과들을 ROLLBACK 통해 단 한방에 날려버릴 수 있다
             throw new RuntimeException(e);
-        } finally {
-            connection.setAutoCommit(true); // * 중요 : DataSource 본질적으로 Connection 재사용이기때문에 우리가 사용할때 어떤 설정을 했다면 그 더러운 상태로 반환하지말고 원상복구(모든 옵션들을 다시 원점복귀)하여 반환해야한다
-            TransactionSynchronizationManager.unbindResource(dataSource); // 트랜잭션 동기화 : 삭제 (D)
-            // (2) Connection 반환을 해주어야한다 = 쿼리를 수행하는 메서드 내부에서 Connection 반환을 하면 다른 쿼리의 Connection 을 방해하는것
-            connection.close();
-            TransactionSynchronizationManager.clearSynchronization(); // 트랜잭션 동기화 해제/비활성화 (initSynchronization과 짝)
         }
     }
 }
