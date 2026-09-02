@@ -8,13 +8,11 @@ import com.example.demo.repository.User;
 import com.example.demo.repository.UserJdbcApiRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -22,9 +20,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final DataSource dataSource;
     private final UserJdbcApiRepository userJdbcApiRepository;
     private final MessageJdbcApiRepository messageJdbcApiRepository;
+    private final PlatformTransactionManager platformTransactionManager; // 트랜잭션 매니저 (DI로 주입됨) - 내부적으로 dataSource 통해 Connection 관리 (내가 등록한 @Bean dataSource 사용)
 
     public UserResponseDto findById(@NonNull Integer id) throws SQLException {
         User retrievedUser = userJdbcApiRepository.findById(id);
@@ -32,14 +30,12 @@ public class UserService {
         return UserResponseDto.from(retrievedUser, messages);
     }
 
-
     public UserResponseDto create(UserCreateRequestDto request) throws SQLException {
-        PlatformTransactionManager platformTransactionManager = new DataSourceTransactionManager(dataSource);  // 트랜잭션 매니저 생성 - 내부적으로 dataSource 통해 Connection 관리
         // 트랜잭션 시작(사전준비) : Connection 대여 > 자동 커밋 끄기(OFF) > TransactionSynchronizationManager로 ThreadLocal에 Connection 저장
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
                 new DefaultTransactionDefinition() // 격리 수준/전파 방식 등 기본 트랜잭션 속성
         );
-        
+
         try {
             User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
             Message createdMessages = messageJdbcApiRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
