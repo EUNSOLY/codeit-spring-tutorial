@@ -1,29 +1,27 @@
 package com.example.demo.repository;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.ZoneId;
 
 @Repository
+@RequiredArgsConstructor
 public class UserJdbcApiRepository {
-    @Value("${spring.datasource.url}")
-    private String url;
-
-    @Value("${spring.datasource.username}")
-    private String username;
-
-    @Value("${spring.datasource.password}")
-    private String password;
-
+    private final DataSource dataSource;
+    
     public User findById(Integer id) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         try {
-            connection = DriverManager.getConnection(url, username, password);
+            connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT * FROM \"user\" WHERE id = ?");
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
