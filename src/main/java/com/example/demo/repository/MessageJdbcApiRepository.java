@@ -55,6 +55,8 @@ public class MessageJdbcApiRepository {
 
         try {
             connection = dataSource.getConnection();
+            if (userId > 2)
+                throw new RuntimeException("같은 하나의 트랜잭션 내 예외 발생 시 ROLLBACK 되는지 확인하기 위해 일부러 유저 ID 3부터는 메세지 저장을 시도할 시 에러를 발생시킵니다");
             statement = connection.prepareStatement("INSERT INTO \"message\" (user_id, message, created_at) VALUES (?,?,?);");
             statement.setInt(1, userId);
             statement.setString(2, message);
@@ -72,7 +74,7 @@ public class MessageJdbcApiRepository {
 
             // SELECT 메세지 정보
             statement = connection.prepareStatement("SELECT * FROM \"message\" WHERE id = ?");
-            
+
             statement.setInt(1, createdMessageId);
             resultSet = statement.executeQuery();
 
