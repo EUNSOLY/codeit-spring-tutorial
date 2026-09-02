@@ -23,8 +23,9 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String message;
+    @Column(name = "user_id")
     private Integer userId;
+    private String message;
     /**
      * Hibernate 6+ (Spring Boot 3.x)에서 implicit naming strategy 변경으로
      * camelCase → snake_case 자동 변환이 보장되지 않아 명시적으로 컬럼명 지정
