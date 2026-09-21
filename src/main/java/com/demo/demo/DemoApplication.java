@@ -29,11 +29,12 @@ public class DemoApplication {
         System.out.println("========== 프로그램이 시작되었습니다. ==========");
         try {
 //          connect(null, "7890");
-//          connect("aaron", null);
+//            connect("aaron", null);
             connect("aaron", "7890");
 //            connect("admin", "1234");
-        } catch (RuntimeException e) {
-            log.error(e.getMessage(), e);
+        } catch (CustomException e) {
+            log.makeLoggingEventBuilder(e.getType().getLevel())
+                    .log(e.getMessage(), e);
         }
         System.out.println("========== 프로그램이 중간에 멈추지 않고, 정상적으로 종료되었습니다. = exit code 0 ==========");
     }
