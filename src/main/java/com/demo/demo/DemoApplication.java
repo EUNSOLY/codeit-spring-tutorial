@@ -10,6 +10,9 @@ import org.springframework.util.StringUtils;
 public class DemoApplication {
 
     public static void connect(String username, String password) {
+        if (true) {
+            throw new RuntimeException("예상치 못한 갑작스런 예외/오류 발생");
+        }
         if (!StringUtils.hasLength(username)) {
             throw new CustomException(ErrorType.USERNAME_NOT_EXIST);
         }
@@ -35,6 +38,8 @@ public class DemoApplication {
         } catch (CustomException e) {
             log.makeLoggingEventBuilder(e.getType().getLevel())
                     .log(e.getMessage(), e);
+        } catch (RuntimeException e) {
+            log.error(e.getMessage(), e);
         }
         System.out.println("========== 프로그램이 중간에 멈추지 않고, 정상적으로 종료되었습니다. = exit code 0 ==========");
     }
