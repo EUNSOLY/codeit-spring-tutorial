@@ -1,8 +1,7 @@
 package com.demo.demo;
 
-import com.demo.demo.exception.DatabaseException;
-import com.demo.demo.exception.PasswordException;
-import com.demo.demo.exception.UsernameException;
+import com.demo.demo.exception.CustomException;
+import com.demo.demo.exception.ErrorType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -12,16 +11,18 @@ public class DemoApplication {
 
     public static void connect(String username, String password) {
         if (!StringUtils.hasLength(username)) {
-            throw new UsernameException();
+            throw new CustomException(ErrorType.USERNAME_NOT_EXIST);
         }
 
         if (!StringUtils.hasLength(password)) {
-            throw new PasswordException();
+            throw new CustomException(ErrorType.PASSWORD_NOT_EXIST);
         }
 
         if (!username.equals("admin") || !password.equals("1234")) {
-            throw new DatabaseException("ID / PW 일치하지 않음");
+            throw new CustomException(ErrorType.AUTHENTICATION_FAILED);
         }
+
+        System.out.println("- 데이터 베이스 접속 성공");
     }
 
     public static void main(String[] args) {
@@ -30,6 +31,7 @@ public class DemoApplication {
 //          connect(null, "7890");
 //          connect("aaron", null);
             connect("aaron", "7890");
+//            connect("admin", "1234");
         } catch (RuntimeException e) {
             log.error(e.getMessage(), e);
         }
