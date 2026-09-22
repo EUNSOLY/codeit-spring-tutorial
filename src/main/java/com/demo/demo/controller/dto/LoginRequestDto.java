@@ -1,5 +1,7 @@
 package com.demo.demo.controller.dto;
 
+import com.demo.demo.controller.validation.OnLogin;
+import com.demo.demo.controller.validation.OnRegistration;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +10,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginRequestDto {
 
-    @Size(min = 4, message = "유저 아이디는 4글자 이상이어야합니다")
+    @Size(groups = OnRegistration.class, min = 8, message = "회원가입 시 최초 유저 아이디는 8글자 이상이어야합니다")
+    @Size(groups = OnLogin.class, min = 4, message = "유저 아이디는 4글자 이상이어야합니다")
     private final String username;
-    
-    @Size(min = 4, message = "유저 패스워드는 4글자 이상이어야합니다")
-    private final String password;
 
+    @Size(groups = OnRegistration.class, min = 8, message = "회원가입 시 최초 유저 패스워드는 8글자 이상이어야합니다")
+    @Size(groups = OnLogin.class, min = 4, message = "유저 패스워드는 4글자 이상이어야합니다")
+    private final String password;
 }

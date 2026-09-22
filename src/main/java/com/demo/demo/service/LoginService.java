@@ -26,9 +26,9 @@ public class LoginService {
 //            String username,
 //            String password
     ) {
-        if (true) {
-            throw new RuntimeException("예상치 못한 갑작스러운 예외/오류 발생");
-        }
+//        if (true) {
+//            throw new RuntimeException("예상치 못한 갑작스러운 예외/오류 발생");
+//        }
         if (!StringUtils.hasLength(username)) {
             throw new UserException(ErrorType.User.USERNAME_NOT_EXIST);
         }

@@ -2,12 +2,15 @@ package com.demo.demo.controller;
 
 import com.demo.demo.controller.dto.LoginRequestDto;
 import com.demo.demo.controller.dto.LoginResponseDto;
+import com.demo.demo.controller.validation.OnLogin;
+import com.demo.demo.controller.validation.OnRegistration;
 import com.demo.demo.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -31,8 +34,16 @@ public class LoginController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 //  public LoginResponseDto connect(@RequestBody @Valid LoginRequestDto request) {
-    public LoginResponseDto<Void> connect(@RequestBody LoginRequestDto request) {
+    public LoginResponseDto<Void> connect(@RequestBody @Validated(OnLogin.class) LoginRequestDto request) {
         loginService.connect(request);
+        return LoginResponseDto.success(request.getUsername());
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @RequestMapping(method = RequestMethod.POST, value = "/registration")
+    public LoginResponseDto<Void> registration(@RequestBody @Validated(OnRegistration.class) LoginRequestDto request) {
+//      loginService.registration(request); - 실제 회원가입 로직에 의해 회원가입이 성공적으로 되었다고 가정
         return LoginResponseDto.success(request.getUsername());
     }
 
