@@ -20,7 +20,7 @@ services:
     volumes:
       # - 스프링 컨테이너가 호스트 내 log-data 볼륨 영역 내 로그 파일을 적으면 Logstash 컨테이너가 자동으로 긁어서 수집
       - log-data:/var/log/app #Spring과 동일한 볼륨 공유 (Spring-App -> Logstash) / HOST VOLUME -> CONTAINER
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro # 현재 docker-compose.yml 파일이 존재하는 동일 호스트 디렉토리 내 ./logstash.conf 설정파일 찾아서 컨테이너 내부로 가져오기
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro # 현재 docker-compose-*.yml 파일이 존재하는 동일 호스트 디렉토리 내 ./logstash.conf 설정파일 찾아서 컨테이너 내부로 가져오기
     depends_on:
       - elasticsearch
 
