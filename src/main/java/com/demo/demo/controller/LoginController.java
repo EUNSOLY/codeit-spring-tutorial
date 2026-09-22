@@ -3,7 +3,6 @@ package com.demo.demo.controller;
 import com.demo.demo.controller.dto.LoginRequestDto;
 import com.demo.demo.controller.dto.LoginResponseDto;
 import com.demo.demo.service.LoginService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,8 +28,8 @@ public class LoginController {
     @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
     @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public LoginResponseDto connect(@RequestBody @Valid LoginRequestDto request) {
-        log.info("여기인데");
+//  public LoginResponseDto connect(@RequestBody @Valid LoginRequestDto request) {
+    public LoginResponseDto connect(@RequestBody LoginRequestDto request) {
         loginService.connect(request);
         return LoginResponseDto.success(request.getUsername());
     }
