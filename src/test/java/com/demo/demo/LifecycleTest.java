@@ -5,16 +5,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // 기본값(Lifecycle.PER_METHOD) : 테스트 메서드 마다 새로운 테스트 클래스 인스턴스를 생성
 // TestInstance.Lifecycle.PER_CLASS 지정 시 테스트 클래스 전체 스코프에서 오직 한개의 인스턴스만 생성
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LifecycleTest {
     private int counter = 0;
 
     @BeforeAll
-    static void beforeAll() {
+    void beforeAll() {
         System.out.println("BeforeAll 실행");
     }
 
@@ -43,7 +45,7 @@ public class LifecycleTest {
     }
 
     @AfterAll
-    static void afterAll() {
+    void afterAll() {
         System.out.println("AfterAll 실행");
     }
 
@@ -55,9 +57,10 @@ public class LifecycleTest {
      * test1 counter = 1
      * AfterEach 실행
      * BeforEach 실행
-     * test2 counter = 1
+     * test2 counter = 2
      * AfterEach 실행
-     * 즉 상태 공유 따위 되지않음!
+     * AfterAll 실행
+     * 상태 공유 됨 + BeforeAll, AfterAll static 키워드 사용안해도됨!
      */
 
 }
