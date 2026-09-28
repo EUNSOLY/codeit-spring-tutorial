@@ -20,6 +20,18 @@ public class UserTest {
 
         System.out.println("User Test - userValidation 실행");
     }
-    
+
+    @Test
+    void groupAssertions() {
+        User user = new User("alice@example.com", "Alice");
+
+        assertAll(
+                "User 정보 검증",
+                () -> assertEquals("Alice", user.getName()),
+                () -> assertTrue(user.getEmail().contains("@")),
+                () -> assertFalse(user.isDeleted())
+        );
+    }
+
 
 }
