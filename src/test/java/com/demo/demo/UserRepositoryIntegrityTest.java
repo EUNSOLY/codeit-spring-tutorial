@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         "spring.datasource.username=root",
         "spring.datasource.password=root",
         "spring.jpa.hibernate.ddl-auto=create"
-
 })
 public class UserRepositoryIntegrityTest {
     // Given - 준비: 테스트에 필요한 데이터나 상태를 만듬
