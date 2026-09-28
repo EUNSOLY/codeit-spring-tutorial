@@ -1,6 +1,8 @@
 package com.demo.demo;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +12,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class UserServiceTest {
 
     private UserService userService;
+
+    @BeforeAll
+    static void connectToDatabase() {
+        System.out.println("테스트 DB 연결 시작");
+    }
+
+    @AfterAll
+    static void disconnectFromDatabase() {
+        System.out.println("테스트 DB 연결 해제");
+    }
 
     @BeforeEach
     void setUp() {
