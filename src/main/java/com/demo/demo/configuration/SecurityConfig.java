@@ -18,7 +18,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable);
 
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated()); // 모든 리소스는 인증을 한 뒤 접근 가능하다.
+
+        http.formLogin(form -> form.loginPage("/login").permitAll());
         return http.build();
     }
 }

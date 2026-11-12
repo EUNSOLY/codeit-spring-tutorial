@@ -46,6 +46,13 @@ public class UserRepository implements IRepository<User, Integer> {
     }
 
     @Override
+    public Optional<User> findByUsername(String username) {
+        return users.values().stream()
+            .filter(item -> item.getName().equalsIgnoreCase(username))
+            .findAny();
+    }
+
+    @Override
     public List<User> findAll() {
         return users.values().stream().toList();
     }
