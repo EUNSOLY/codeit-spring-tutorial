@@ -2,6 +2,8 @@ package com.demo.demo.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final CustomAuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
@@ -41,6 +44,15 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(
+            AuthenticationManagerBuilder.class);
+
+        authenticationManagerBuilder.authenticationProvider(authenticationProvider);
+
+        return authenticationManagerBuilder.build();
+    }
     /* @Bean public InMemoryUserDetailsManager userDetailsManager(PasswordEncoder passwordEncoder) {
     UserDetails aaron = User.withUsername("aaron")
     .password(passwordEncoder.encode("456"))
