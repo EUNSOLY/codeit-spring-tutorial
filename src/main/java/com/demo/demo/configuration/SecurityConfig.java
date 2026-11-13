@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -29,12 +28,13 @@ public class SecurityConfig {
             .permitAll());
 
         http.logout(logout -> logout
-            .logoutUrl("/logout")
-            .logoutSuccessUrl("/login")
-            .addLogoutHandler((request, response, authentication) -> {
-                HttpSession session = request.getSession();
-                session.invalidate();
-            })
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+            // .addLogoutHandler((request, response, authentication) -> {
+            //     HttpSession session = request.getSession();
+            //     session.invalidate();
+            // })
         )
         ;
 
