@@ -5,10 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.RequiredArgsConstructor;
@@ -45,23 +41,23 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsManager(PasswordEncoder passwordEncoder) {
-        UserDetails aaron = User.withUsername("aaron")
-            .password(passwordEncoder.encode("456"))
-            .roles("USER", "ADMIN")
-            .build();
+    /* @Bean public InMemoryUserDetailsManager userDetailsManager(PasswordEncoder passwordEncoder) {
+    UserDetails aaron = User.withUsername("aaron")
+    .password(passwordEncoder.encode("456"))
+    .roles("USER", "ADMIN")
+    .build();
 
-        UserDetails baron = User.withUsername("baron")
-            .password(passwordEncoder.encode("456"))
-            .roles("USER")
-            .build();
+    UserDetails baron = User.withUsername("baron")
+    .password(passwordEncoder.encode("456"))
+    .roles("USER")
+    .build();
 
-        UserDetails caron = User.withUsername("caron")
-            .password(passwordEncoder.encode("456"))
-            .roles("USER")
-            .build();
+    UserDetails caron = User.withUsername("caron")
+    .password(passwordEncoder.encode("456"))
+    .roles("USER")
+    .build();
 
-        return new InMemoryUserDetailsManager(aaron, baron, caron);
+    return new InMemoryUserDetailsManager(aaron, baron, caron);
     }
+     */
 }
