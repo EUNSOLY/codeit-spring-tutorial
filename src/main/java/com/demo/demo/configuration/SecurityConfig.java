@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -22,7 +23,21 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated()); // 모든 리소스는 인증을 한 뒤 접근 가능하다.
 
-        http.formLogin(form -> form.loginPage("/login").permitAll());
+        http.formLogin(form -> form
+            .loginPage("/login")
+            .defaultSuccessUrl("/", true)
+            .permitAll());
+
+        http.logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/login")
+            .addLogoutHandler((request, response, authentication) -> {
+                HttpSession session = request.getSession();
+                session.invalidate();
+            })
+        )
+        ;
+
         return http.build();
     }
 }
