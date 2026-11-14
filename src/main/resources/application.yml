@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: demo
+
+  security:
+    user:
+      name: user
+      password: 1111
+      roles: USER
+
+  # Live Reload 기능 활성화
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: true
+
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
+
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
