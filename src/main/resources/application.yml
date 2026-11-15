@@ -1,0 +1,28 @@
+server:
+  servlet:
+    session:
+      persistent: false  # 스프링 시큐리티 재시작 시 세션 유지 제거
+
+spring:
+  application:
+    name: demo
+
+  # Live Reload 기능 활성화
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: true
+
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
+
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+
+logging:
+  level:
+    org.springframework.security: TRACE
