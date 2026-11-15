@@ -1,3 +1,8 @@
+server:
+  servlet:
+    session:
+      persistent: false  # 스프링 시큐리티 재시작 시 세션 유지 제거
+
 spring:
   application:
     name: demo
