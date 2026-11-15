@@ -19,7 +19,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth.anyRequest().authenticated()) // HTTP 통신에 대한 인가설정 (어느 요청이든 인가를 받겠다)
             .formLogin(form -> form
-                .loginPage("/loginPage")
+                // .loginPage("/loginPage")
                 .loginProcessingUrl("/loginProc")
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/failed")
