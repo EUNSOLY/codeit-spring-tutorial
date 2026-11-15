@@ -32,14 +32,6 @@ public class SecurityConfig {
             .password("{noop}1111")
             .roles("USER").build();
 
-        UserDetails user2 = User.withUsername("user2")
-            .password("{noop}1111")
-            .roles("USER").build();
-
-        UserDetails user3 = User.withUsername("user3")
-            .password("{noop}1111")
-            .roles("USER").build();
-
-        return new InMemoryUserDetailsManager(user, user2, user3);
+        return new InMemoryUserDetailsManager(user);
     }
 }
