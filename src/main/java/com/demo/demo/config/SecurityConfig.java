@@ -19,6 +19,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
             .formLogin(Customizer.withDefaults())
+            .rememberMe((rememberMe -> rememberMe
+                    .alwaysRemember(true) // 클라이언트가 활성화 하든말든 무조건 기억
+                    .tokenValiditySeconds(3600)
+                    .userDetailsService(this.userDetailsService())
+                    .rememberMeParameter("remember")
+                    .rememberMeCookieName("remember")
+                    .key("security")
+                )
+            )
         ;
 
         return http.build();
